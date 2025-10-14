@@ -3,6 +3,6 @@
 Equipo conformado por:<br>
 - Jesus Palma<br>
 - Victor Gonzalez<br>
-- Santiago Sanchez Chavirez<br>
+- Santiago Sanchez<br>
 - Cuauhtémoc Vázquez<br>
 - Eduardo Samoano<br>
