@@ -47,6 +47,16 @@ header {
     gap: 15px;
 }
 
+.logo{
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 50px;
+    width: auto;
+}
+
 .login_btn{
     background: none;
     border: none;
