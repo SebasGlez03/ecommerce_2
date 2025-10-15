@@ -16,7 +16,7 @@ header {
     align-items: center;
     padding: 10px 40px;
     height: 70px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     margin-bottom: 20px;
 }
@@ -28,7 +28,7 @@ header {
     flex: 1;
 }
 
-.nav_items a{
+.nav_items a {
     display: flex;
     text-decoration: none;
     color: var(--color-txt-main);
@@ -47,7 +47,7 @@ header {
     gap: 15px;
 }
 
-.logo{
+.logo {
     display: flex;
     align-items: center;
 }
@@ -57,7 +57,7 @@ header {
     width: auto;
 }
 
-.login_btn{
+.login_btn {
     background: none;
     border: none;
     color: var(--color-txt-main);
@@ -87,7 +87,7 @@ header {
     align-items: stretch;
     align-content: stretch;
 }
-    
+
 .categorias {
     background-color: var(--color-bg-secondary);
     color: var(--color-txt-main);
@@ -102,7 +102,7 @@ header {
     font-weight: 400;
     font-style: normal;
     font-variation-settings:
-    "wdth" 100;
+        "wdth" 100;
     padding-top: 0;
     padding-bottom: 20px;
     padding-left: 5px;
@@ -140,4 +140,3 @@ header {
 .categorias_disponibles {
     text-align: center;
 }
-        
