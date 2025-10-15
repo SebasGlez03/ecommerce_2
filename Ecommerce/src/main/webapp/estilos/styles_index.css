@@ -1,0 +1,124 @@
+@import url(variables.css);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    background-color: var(--color-bg-main);
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+header {
+    background-color: var(--color-bg-4th);
+    color: var(--color-txt-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    height: 70px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.nav_items {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex: 1;
+}
+
+.nav_items a{
+    display: flex;
+    text-decoration: none;
+    color: var(--color-txt-main);
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav_items a:hover {
+    color: var(--color-txt-secondary);
+    text-decoration: none;
+}
+
+.user_section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.login_btn{
+    background: none;
+    border: none;
+    color: var(--color-txt-main);
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.login_btn:hover {
+    color: var(--color-txt-secondary);
+    text-decoration: none;
+}
+
+.contenedor {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+}
+    
+.categorias {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-txt-main);
+    display: block;
+    flex-grow: 0.1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+    "wdth" 100;
+    padding-top: 0;
+    padding-bottom: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 200px;
+    min-width: 200px;
+    margin: auto 20px auto 10px;
+}
+
+.categorias a {
+    color: var(--color-txt-secondary);
+    text-decoration: none;
+    margin: 10px;
+}
+
+.categorias a:hover {
+    color: var(--color-txt-main);
+    text-decoration: none;
+}
+
+.info {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-txt-main);
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+}
+
+.categorias_disponibles {
+    text-align: center;
+}
+        
