@@ -71,6 +71,14 @@ header {
     text-decoration: none;
 }
 
+.user_avatar {
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-bg-5th);
+}
+
 .contenedor {
     display: flex;
     flex-direction: row;
@@ -126,6 +134,7 @@ header {
     flex-basis: auto;
     align-self: auto;
     order: 0;
+    margin-right: 10px;
 }
 
 .categorias_disponibles {
