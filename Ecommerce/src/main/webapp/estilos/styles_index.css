@@ -258,3 +258,11 @@ header {
     margin-top: 5px;
 }
 
+/* Footer */
+.contenedor_inferior{
+    color: var(--color-txt-secondary);
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
