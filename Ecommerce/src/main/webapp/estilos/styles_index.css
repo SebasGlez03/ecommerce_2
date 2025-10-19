@@ -115,7 +115,7 @@ header {
     text-align: center;
     max-width: 200px;
     min-width: 200px;
-    margin: auto 20px auto 10px;
+    margin: 0 20px 0 10px;
 }
 
 .categorias a {
@@ -144,6 +144,70 @@ header {
     align-self: auto;
     order: 0;
     margin-right: 10px;
+}
+
+.ofertas {
+    width: 95%;
+    max-width: 1100px;
+    margin: 20px auto;
+    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.img_oferta {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.titulo_productos_generales {
+    text-align: center;
+    color: var(--color-txt-main);
+    margin-top: 20px;
+}
+
+.general_products_container {
+    position: relative;
+    width: 90%;
+    max-width: 1310px;
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.general_products_track {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.general_product_card {
+    background-color: var(--color-bg-main);
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+    flex-shrink: 0;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+}
+
+.general_product_card img {
+    width: 200px;
+    height: 200px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.general_product_info {
+    color: var(--color-txt-main);
+    font-size: 14px;
+    margin-top: 5px;
 }
 
 /* Carousel de productos destacados */
