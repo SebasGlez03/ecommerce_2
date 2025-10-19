@@ -31,7 +31,6 @@ public class UsuariosServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -43,6 +42,8 @@ public class UsuariosServlet extends HttpServlet {
             out.println("</html>");
         }
     }
+
+    // TODO: Agregar un ProcessErrorRequest para capturar un posible error al hacer una Request.
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
