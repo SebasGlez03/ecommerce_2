@@ -1,0 +1,173 @@
+@import url(variables.css);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    background-color: var(--color-bg-main);
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+/* Encabezado */
+header {
+    background-color: var(--color-bg-4th);
+    color: var(--color-txt-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    height: 70px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.nav_items {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex: 1;
+}
+
+.nav_items a {
+    display: flex;
+    text-decoration: none;
+    color: var(--color-txt-main);
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav_items a:hover {
+    color: var(--color-txt-secondary);
+    text-decoration: none;
+}
+
+.user_section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 50px;
+    width: auto;
+}
+
+.login_btn {
+    background: none;
+    border: none;
+    color: var(--color-txt-main);
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.login_btn:hover {
+    color: var(--color-txt-secondary);
+    text-decoration: none;
+}
+
+.user_avatar {
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-bg-5th);
+}
+
+/* ESPECIFICOS DEL LOGIN */
+.contenedor_login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 90px);
+    padding: 20px;
+}
+
+.login_form {
+    background-color: var(--color-bg-secondary);
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    /* Esto sirve para que el padding no afecte al ancho del cuadro */
+    box-sizing: border-box;
+}
+
+.login_form h2 {
+    text-align: center;
+    color: var(--color-txt-main);
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.form_group {
+    margin-bottom: 20px;
+}
+
+.form_group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--color-txt-secondary);
+}
+
+.form_group input {
+    width: 100px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: var(--color-bg-main);
+    color: var(--color-txt-main);
+    font-size: 16px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form_group input:focus {
+    outline: 2px solid var(--color-bg-5th);
+}
+
+.submit_btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-bg-5th);
+    color: var(--color-txt-main);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit_btn:hover {
+    background-color: var(--color-bg-6th);
+}
+
+.form_links {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.form_links a {
+    color: var(--color-txt-secondary);
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+    transition: color 0.3s ease;
+}
+
+.form_links a:hover {
+    color: var(--color-txt-main);
+    text-decoration: none;
+}
