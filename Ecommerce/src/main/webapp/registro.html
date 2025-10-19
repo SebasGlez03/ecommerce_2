@@ -34,11 +34,21 @@
     <div class="contenedor_login">
         <!-- TODO: Cambiar el action al endpoint de la info del form -->
         <form class="login_form" action="" method="POST">
-            <h2>Iniciar Sesión</h2>
+            <h2>Registro</h2>
+
+            <div class="form_group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" required>
+            </div>
 
             <div class="form_group">
                 <label for="email">Correo Electrónico:</label>
                 <input type="email" name="email" id="email" required>
+            </div>
+
+            <div class="form_group">
+                <label for="direccion">Dirección:</label>
+                <input type="text" name="direccion" id="direccion">
             </div>
 
             <div class="form_group">
@@ -47,11 +57,6 @@
             </div>
 
             <button type="submit" class="submit_btn">Ingresar</button>
-
-            <!-- TODO: Agregar el link del form del registro.html -->
-            <div class="form_links">
-                <a href="registro.html">¿No tienes cuenta? Registrate</a>
-            </div>
         </form>
     </div>
 
