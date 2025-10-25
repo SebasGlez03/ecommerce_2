@@ -1,6 +1,6 @@
 package DAO;
 
-import ConexionDB.ConexionDB;
+import ConexionDB.ConexionBD;
 import Docs.Usuario;
 import Interfaces.IConexionDB;
 import com.mongodb.client.MongoCollection;
@@ -24,9 +24,10 @@ public class UsuarioDAO {
         
     }
     
-    public void crearUsuario(Usuario usuario) throws PersistenciaException {
+    public Usuario crearUsuario(Usuario usuario) throws PersistenciaException {
         try {
             coleccion.insertOne(usuario); 
+            return usuario;
         } catch (Exception e) {
             throw new PersistenciaException("Error al crear el usuario en la base de datos", e);
         }
