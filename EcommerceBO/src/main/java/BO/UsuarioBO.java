@@ -8,6 +8,7 @@ import DAO.UsuarioDAO;
 import Docs.Usuario;
 import Excepciones.NegocioException;
 import excepciones.PersistenciaException;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -30,6 +31,10 @@ public class UsuarioBO implements IUsuarioBO {
             if (usuarioExistente != null) {
                 throw new NegocioException("Ya existe un usuario registrado con este correo electronico");
             }
+            
+            //Encriptacion de contra
+            String contraseniaHasheada = BCrypt.hashpw(usuario.getContrasenia(), BCrypt.gensalt()); 
+            usuario.setContrasenia(contraseniaHasheada);
             return usuarioDAO.crearUsuario(usuario);
 
         } catch (PersistenciaException e) {
@@ -60,7 +65,10 @@ public class UsuarioBO implements IUsuarioBO {
             if (!usuarioEncontrado.getContrasenia().equals(contrasenia)) {
                 throw new NegocioException("Credenciales incorrectas.");
             }
-
+            //Verificacion de la conta hasheada
+            if (!BCrypt.checkpw(contrasenia, usuarioEncontrado.getContrasenia())) {
+                throw new NegocioException("Credenciales incorrectas.");
+            }
             return usuarioEncontrado;
 
         } catch (PersistenciaException e) {
