@@ -1,3 +1,6 @@
 /Ecommerce/target/
 /EcommerceDAO/target/
 /EcommerceDAO/nbproject/
+
+# NO BORRAR ESTE YA QUE CUENTA CON INFO SENSIBLE
+/EcommerceDAO/src/main/resources/config.properties

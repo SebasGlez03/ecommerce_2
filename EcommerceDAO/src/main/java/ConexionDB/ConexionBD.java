@@ -5,7 +5,6 @@
 package ConexionDB;
 
 import Interfaces.IConexionDB;
-import Interfaces.IConexionDB;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -17,6 +16,9 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  *
  * @author SantiagoSanchez
@@ -26,17 +28,7 @@ public class ConexionBD implements IConexionDB {
     private MongoClient mongoClient;
     private MongoDatabase database;
 
-    // info de la base de datos
-    private static final String USUARIO = "AGREGAR USUARIO";
-    private static final String CONTRASENIA = "AGREGAR CONTRASENIA";
-    private static final String IP_VPS = "AGREGAR SERVIDOR";
-    private static final String PUERTO = "AGREGAR PUERTO";
-    private static final String AUTH_BD = "admin";
-
-    private final String CONEXION_STRING = String.format(
-            "mongodb://%s:%s@%s:%s/?authSource=%s",
-            USUARIO, CONTRASENIA, IP_VPS, PUERTO, AUTH_BD
-    );
+    private final String CONEXION_STRING;
     private final String BD_REAL = "Ecommerce";
     private final String BD_TEST = "EcommerceTest";
 
@@ -44,32 +36,57 @@ public class ConexionBD implements IConexionDB {
      * Constructor de la conexion con la base de datos.
      *
      * @param esPrueba Si es TRUE se conecta a la base de datos de prueba, Si es
-     * FALSE se conecta a la base de datos real.
+     *                 FALSE se conecta a la base de datos real.
      */
     public ConexionBD(boolean esPrueba) {
+
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+
+            Properties props = new Properties();
+
+            if (input == null ){
+                // Esto pasara si un colaborador de github olvida crear su archivo config.properties
+                System.out.println("Error: No se pudo encontrar el archivo 'config.properties' en el classpath.");
+                System.out.println("Asegúrate de copiar 'config.properties.template' y renombrarlo a 'config.properties' en la carpeta 'src/main/resources/'");
+                throw new RuntimeException("Error: No se pudo encontrar el archivo config.properties");
+            }
+
+            // Cargar el archivo de propiedades
+            props.load(input);
+
+            // Leer las propiedades del archivo
+            String usuario = props.getProperty("db.usuario");
+            String contrasenia = props.getProperty("db.contrasenia");
+            String ip = props.getProperty("db.ip");
+            String puerto = props.getProperty("db.puerto");
+            String authDb = props.getProperty("db.auth_db");
+
+            // Construir la cadena de conexion
+            this.CONEXION_STRING = String.format(
+                "mongodb://%s:%s@%s:%s/?authSource=%s",
+                usuario, contrasenia, ip, puerto, authDb
+            );
+
+        } catch (Exception ex) {
+            // Error si no se puede leer el archivo
+            throw new RuntimeException("Error al cargar la configuracion de la base de datos desde config.properties", ex);
+        }
+
+        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
+        ConnectionString connString = new ConnectionString(CONEXION_STRING);
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(connString)
+                .codecRegistry(pojoCodecRegistry)
+                .build();
+
+        this.mongoClient = MongoClients.create(settings);
+
         if (esPrueba) {
-            CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-                    fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-
-            ConnectionString connString = new ConnectionString(CONEXION_STRING);
-            MongoClientSettings settings = MongoClientSettings.builder()
-                    .applyConnectionString(connString)
-                    .codecRegistry(pojoCodecRegistry)
-                    .build();
-
-            mongoClient = MongoClients.create(settings);
             this.database = mongoClient.getDatabase(BD_TEST);
         } else {
-            CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-                    fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-
-            ConnectionString connString = new ConnectionString(CONEXION_STRING);
-            MongoClientSettings settings = MongoClientSettings.builder()
-                    .applyConnectionString(connString)
-                    .codecRegistry(pojoCodecRegistry)
-                    .build();
-
-            mongoClient = MongoClients.create(settings);
             this.database = mongoClient.getDatabase(BD_REAL);
         }
     }

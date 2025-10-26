@@ -1,0 +1,12 @@
+# ESTA ES UNA PLANTILLA. Renombra este archivo a "config.properties"
+# y llenalo con las credenciales reales
+# El archivo "config.properties" está ignorado por Git
+# Debe de ubicarse en /src/main/resources/config.properties
+
+# No deben tener espacio despues del igual (ej. db.usuario=usuario)
+
+db.usuario=usuario_mongo
+db.contrasenia=tu_concontrasenia_mongo
+db.ip=ip_servidor_mongo
+db.puerto=puerto_servidor_mongo
+db.auth_db=admin
