@@ -26,7 +26,17 @@ public class ConexionBD implements IConexionDB {
     private MongoClient mongoClient;
     private MongoDatabase database;
 
-    private final String CONEXION_STRING = "mongodb://localhost:27017";
+    // info de la base de datos
+    private static final String USUARIO = "AGREGAR USUARIO";
+    private static final String CONTRASENIA = "AGREGAR CONTRASENIA";
+    private static final String IP_VPS = "AGREGAR SERVIDOR";
+    private static final String PUERTO = "AGREGAR PUERTO";
+    private static final String AUTH_BD = "admin";
+
+    private final String CONEXION_STRING = String.format(
+            "mongodb://%s:%s@%s:%s/?authSource=%s",
+            USUARIO, CONTRASENIA, IP_VPS, PUERTO, AUTH_BD
+    );
     private final String BD_REAL = "Ecommerce";
     private final String BD_TEST = "EcommerceTest";
 

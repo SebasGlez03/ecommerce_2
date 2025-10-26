@@ -12,6 +12,7 @@ import Interfaces.IConexionDB;
 import excepciones.PersistenciaException;
 import org.bson.types.ObjectId;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
