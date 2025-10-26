@@ -1,4 +1,4 @@
-# ESTA ES UNA PLANTILLA. Renombra este archivo a "config.properties"
+# ESTA ES UNA PLANTILLA. Copia este archivo y renombralo a "config.properties"
 # y llenalo con las credenciales reales
 # El archivo "config.properties" está ignorado por Git
 # Debe de ubicarse en /src/main/resources/config.properties

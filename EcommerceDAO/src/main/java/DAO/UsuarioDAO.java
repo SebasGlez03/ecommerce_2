@@ -1,6 +1,5 @@
 package DAO;
 
-import ConexionDB.ConexionBD;
 import Docs.Usuario;
 import Interfaces.IConexionDB;
 import com.mongodb.client.MongoCollection;

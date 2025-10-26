@@ -11,9 +11,12 @@ import Docs.Usuario;
 import Interfaces.IConexionDB;
 import excepciones.PersistenciaException;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 
 /**
  *
@@ -28,6 +31,23 @@ public class UsuariosTest {
     private Usuario usuarioGuardado;
     private final UsuarioDAO dao = new UsuarioDAO(conexionDB);
     private ObjectId id = new ObjectId();
+
+    @AfterEach
+    public void limpiarDatos() throws PersistenciaException {
+        if (usuarioGuardado != null && usuarioGuardado.getId() != null) {
+            System.out.println("Eliminando usuario de prueba: " + usuarioGuardado.getId());
+            eliminarUsuario(usuarioGuardado.getId());
+        }
+    }
+
+    private void eliminarUsuario(Object id) throws PersistenciaException {
+        try {
+            MongoCollection<Usuario> coleccion = ((ConexionBD) conexionDB).getCollection("Usuarios", Usuario.class);
+            coleccion.deleteOne(Filters.eq("_id", id));
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al eliminar usuario: " + ex.getMessage());
+        }
+    }
 
     @Test
     public void testRegistrarUsuarioCompletoOK() throws PersistenciaException {
