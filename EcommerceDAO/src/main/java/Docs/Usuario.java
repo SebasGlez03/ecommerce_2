@@ -16,6 +16,7 @@ public class Usuario {
     private String nombre;
     private String email;
     private String contrasenia;
+    private String direccion;
     private String telefono;
     private Boolean esActivo;
     private RolUsuario rolUsuario;
@@ -23,11 +24,22 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(ObjectId id, String nombre, String email, String contrasenia, String telefono, Boolean esActivo, RolUsuario rolUsuario) {
+    public Usuario(ObjectId id, String nombre, String email, String contrasenia, String direccion, String telefono, Boolean esActivo, RolUsuario rolUsuario) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.contrasenia = contrasenia;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.esActivo = esActivo;
+        this.rolUsuario = rolUsuario;
+    }
+
+    public Usuario(String nombre, String email, String contrasenia, String direccion, String telefono, Boolean esActivo, RolUsuario rolUsuario) {
+        this.nombre = nombre;
+        this.email = email;
+        this.contrasenia = contrasenia;
+        this.direccion = direccion;
         this.telefono = telefono;
         this.esActivo = esActivo;
         this.rolUsuario = rolUsuario;
@@ -63,6 +75,14 @@ public class Usuario {
 
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getTelefono() {

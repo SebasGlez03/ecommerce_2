@@ -32,9 +32,10 @@
     </header>
 
     <div class="contenedor_login">
-        <!-- TODO: Cambiar el action al endpoint de la info del form -->
-        <form class="login_form" action="" method="POST">
+        <form class="login_form" action="usuarios" method="POST">
             <h2>Iniciar Sesión</h2>
+
+            <input type="hidden" name="accion" value="login">
 
             <div class="form_group">
                 <label for="email">Correo Electrónico:</label>

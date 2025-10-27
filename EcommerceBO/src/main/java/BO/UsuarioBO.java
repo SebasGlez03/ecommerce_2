@@ -18,6 +18,10 @@ public class UsuarioBO implements IUsuarioBO {
 
     private UsuarioDAO usuarioDAO;
 
+    public UsuarioBO(UsuarioDAO usuarioDAO) {
+        this.usuarioDAO = usuarioDAO;
+    }
+
     @Override
     public Usuario crearUsuario(Usuario usuario) throws NegocioException {
         //Validacion del nombre
@@ -31,9 +35,9 @@ public class UsuarioBO implements IUsuarioBO {
             if (usuarioExistente != null) {
                 throw new NegocioException("Ya existe un usuario registrado con este correo electronico");
             }
-            
+
             //Encriptacion de contra
-            String contraseniaHasheada = BCrypt.hashpw(usuario.getContrasenia(), BCrypt.gensalt()); 
+            String contraseniaHasheada = BCrypt.hashpw(usuario.getContrasenia(), BCrypt.gensalt());
             usuario.setContrasenia(contraseniaHasheada);
             return usuarioDAO.crearUsuario(usuario);
 
@@ -60,10 +64,6 @@ public class UsuarioBO implements IUsuarioBO {
             //Verificamos que sea una cuenta activa
             if (!usuarioEncontrado.getEsActivo()) {
                 throw new NegocioException("La cuenta de usuario se encuentra inactiva.");
-            }
-            //Verificamos que sea la contra correcta
-            if (!usuarioEncontrado.getContrasenia().equals(contrasenia)) {
-                throw new NegocioException("Credenciales incorrectas.");
             }
             //Verificacion de la conta hasheada
             if (!BCrypt.checkpw(contrasenia, usuarioEncontrado.getContrasenia())) {

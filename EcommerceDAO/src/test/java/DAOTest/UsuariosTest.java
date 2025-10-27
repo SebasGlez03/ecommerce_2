@@ -55,6 +55,7 @@ public class UsuariosTest {
         Usuario nuevoUsuario = new Usuario(id, "Santiago",
                 "santiagosanches@gmail.com",
                 "12345",
+                "Manzana #123",
                 "6442122312",
                 Boolean.TRUE,
                 RolUsuario.ADMIN);

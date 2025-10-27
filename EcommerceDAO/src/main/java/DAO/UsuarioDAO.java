@@ -34,7 +34,7 @@ public class UsuarioDAO {
     
     public Usuario obtenerUsuarioPorCredenciales(String correoElectronico) throws PersistenciaException {
         try {
-            Bson filtro = Filters.regex("correoElectronico", "^" + correoElectronico + "$", "i"); 
+            Bson filtro = Filters.regex("email", "^" + correoElectronico + "$", "i"); 
             Usuario documentoUsuario = coleccion.find(filtro).first(); 
 
             return documentoUsuario;  

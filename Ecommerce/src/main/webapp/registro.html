@@ -35,6 +35,8 @@
         <form class="login_form" action="usuarios" method="POST" enctype="application/x-www-form-urlencoded">
             <h2>Registro</h2>
 
+            <input type="hidden" name="accion" value="registrar">
+
             <div class="form_group">
                 <label for="nombre">Nombre:</label>
                 <input type="text" name="nombre" id="nombre" required>
@@ -55,7 +57,7 @@
                 <input type="password" name="password" id="password" required>
             </div>
 
-            <button type="submit" class="submit_btn">Ingresar</button>
+            <button type="submit" class="submit_btn">Registrate</button>
         </form>
     </div>
 
