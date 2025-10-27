@@ -198,6 +198,7 @@ public class UsuariosServlet extends HttpServlet {
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
         String direccion = request.getParameter("direccion");
+        String telefono = request.getParameter("telefono");
         String password = request.getParameter("password");
 
         try {
@@ -207,6 +208,7 @@ public class UsuariosServlet extends HttpServlet {
             usuario.setEmail(email);
             usuario.setContrasenia(password);
             usuario.setDireccion(direccion);
+            usuario.setTelefono(telefono);
             usuario.setEsActivo(true);
             usuario.setRolUsuario(Docs.RolUsuario.CLIENTE); // Cliente por defecto
 
