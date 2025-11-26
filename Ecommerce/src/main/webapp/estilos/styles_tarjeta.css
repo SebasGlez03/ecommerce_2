@@ -1,0 +1,223 @@
+@import url(variables.css);
+
+/* Estilos generales */
+body {
+    background-color: var(--color-bg-main);
+    font-family: "Roboto", sans-serif;
+    color: var(--color-txt-main);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+* { box-sizing: border-box; }
+
+/* Encabezado */
+header {
+    background-color: var(--color-bg-4th);
+    color: var(--color-txt-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    height: 70px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 20px;
+}
+
+.logo img { height: 40px; width: auto; }
+
+.nav_items {
+    display: flex;
+    gap: 20px;
+}
+.nav_items a:hover { color: var(--color-txt-secondary); }
+
+.search_container {
+    display: flex;
+    background-color: var(--color-bg-main);
+    border-radius: 20px;
+    padding: 5px 15px;
+    width: 300px;
+    align-items: center;
+    margin: 0 20px;
+}
+.search_container input {
+    background: transparent;
+    border: none;
+    color: var(--color-txt-main);
+    width: 100%;
+    outline: none;
+}
+
+.user_section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.user_avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--color-bg-5th);
+}
+
+/* Contenedor del pago */
+.payment_container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 100px;
+    align-items: flex-start;
+}
+
+/* Columna izquierda, formulario*/
+.payment_form_card {
+    background-color: var(--color-bg-secondary);
+    border-radius: 10px;
+    padding: 30px;
+    flex: 1.2; /* Ocupa un poco más de espacio */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.form_title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: white;
+}
+
+.form_section_label {
+    color: var(--color-txt-secondary);
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    display: block;
+}
+
+/* Grid para inputs */
+.form_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.full_width {
+    grid-column: span 2;
+}
+
+/* Estilo de los inputs */
+.custom_input {
+    background-color: var(--color-bg-tertiary);
+    border: none;
+    border-radius: 5px;
+    padding: 12px 15px;
+    color: var(--color-txt-main);
+    font-size: 14px;
+    width: 100%;
+}
+
+.custom_input::placeholder {
+    color: var(--color-txt-placeholder);
+}
+
+.custom_input:focus {
+    outline: 1px solid var(--color-bg-6th);
+}
+
+/* Columna derecha, botones */
+.payment_methods_col {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    height: 100%;
+    justify-content: space-between;
+    min-height: 500px; 
+}
+
+.methods_group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.method_btn {
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: center;
+    width: 100%;
+}
+
+/* Botón Activo (Tarjeta) */
+.method_btn.active {
+    background-color: #312e81;
+    box-shadow: 0 0 10px rgba(49, 46, 129, 0.5);
+}
+
+/* Botones Inactivos */
+.method_btn.secondary {
+    background-color: var(--color-bg-5th);
+}
+
+.method_btn.secondary:hover {
+    background-color: var(--color-bg-6th);
+}
+
+/* Botón Pagar */
+.pay_btn_container {
+    margin-top: auto;
+    padding-top: 40px;
+}
+
+.btn_pay {
+    background-color: var(--color-bg-5th);
+    color: white;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn_pay:hover {
+    background-color: var(--color-bg-6th);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--color-txt-secondary);
+    font-size: 14px;
+    margin-top: auto;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .payment_container {
+        flex-direction: column;
+        gap: 40px;
+        padding: 20px;
+    }
+    .payment_methods_col {
+        width: 100%;
+        min-height: auto;
+    }
+}

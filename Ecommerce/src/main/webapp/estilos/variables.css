@@ -10,4 +10,19 @@
     /* Colores de fuente */
     --color-txt-main: #f8f8f8;
     --color-txt-secondary: #d1d1d1;
+
+    /*Productos*/
+    --color-success: #4ade80;
+    --color-star: #fbbf24; 
+
+    /*Carrito*/
+    --color-border-table: #f8f8f8;
+
+    /*Tarjeta*/
+    --color-btn-active: #2e2e8b; 
+    --color-txt-placeholder: #5c6b7f;
+
+    /*Confirmación*/
+    --color-border: #ffffff;
+
 }

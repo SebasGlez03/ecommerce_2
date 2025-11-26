@@ -1,0 +1,223 @@
+@import url(variables.css);
+
+/* Estilos generales */
+body {
+    background-color: var(--color-bg-main);
+    font-family: "Roboto", sans-serif;
+    color: var(--color-txt-main);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* Encabezado*/
+header {
+    background-color: var(--color-bg-4th);
+    color: var(--color-txt-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    height: 70px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 20px;
+}
+
+.logo img { height: 40px; width: auto; }
+
+.nav_items {
+    display: flex;
+    gap: 20px;
+}
+
+.nav_items a:hover { color: var(--color-txt-secondary); }
+
+.search_container {
+    display: flex;
+    background-color: var(--color-bg-main);
+    border-radius: 20px;
+    padding: 5px 15px;
+    width: 300px;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.search_container input {
+    background: transparent;
+    border: none;
+    color: var(--color-txt-main);
+    width: 100%;
+    outline: none;
+}
+
+.user_section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user_avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--color-bg-5th);
+}
+
+/* Contenido del carrito */
+.cart_container {
+    flex: 1;
+    padding: 20px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* tabla de productos*/
+.cart_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: transparent;
+}
+
+.cart_table th {
+    border: 1px solid var(--color-txt-main);
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.cart_table td {
+    border: 1px solid var(--color-txt-main);
+    padding: 15px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Ajustes específicos de columnas */
+.col_img { width: 100px; }
+.col_desc { text-align: left !important; width: 40%; }
+.col_qty { width: 100px; }
+
+.product_thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background-color: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.product_name {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.qty_display {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.price_text {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Botón Siguiente Paso */
+.next_step_container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 40px;
+}
+
+.btn_next_step {
+    background-color: var(--color-bg-5th);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn_next_step:hover {
+    background-color: var(--color-bg-6th);
+}
+
+/* carrito vacío */
+.empty_cart_view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    width: 100%;
+}
+
+.empty_cart_box {
+    background-color: var(--color-bg-tertiary); 
+    padding: 50px;
+    border-radius: 8px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.empty_title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.empty_icon {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.btn_featured {
+    background-color: var(--color-bg-5th);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* utilidades (ocultar/mostrar*/
+.hidden { display: none !important; }
+
+/* Botón flotante */
+.demo_toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    z-index: 1000;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--color-txt-secondary);
+    font-size: 14px;
+    margin-top: auto;
+}
