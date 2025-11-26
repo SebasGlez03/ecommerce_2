@@ -1,7 +1,6 @@
 /Ecommerce/target/
-/EcommerceDAO/target/
-/EcommerceDAO/nbproject/
-/EcommerceBO/target/
 
 # NO BORRAR ESTE YA QUE CUENTA CON INFO SENSIBLE
-/EcommerceDAO/src/main/resources/config.properties
+/EcommercePersistencia/src/main/resources/config.properties
+/EcommercePersistencia/target/
+/EcommercePersistencia/nbproject/

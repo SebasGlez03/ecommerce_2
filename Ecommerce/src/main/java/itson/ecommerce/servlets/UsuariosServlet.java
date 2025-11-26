@@ -4,10 +4,6 @@
  */
 package itson.ecommerce.servlets;
 
-import Docs.Usuario;
-import Excepciones.NegocioException;
-import Interfaces.IConexionDB;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,10 +11,18 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import BO.IUsuarioBO;
-import BO.UsuarioBO;
-import ConexionDB.ConexionBD;
-import DAO.UsuarioDAO;
+
+// IMPORTS DE TU NUEVA ARQUITECTURA
+import itson.ecommercedominio.Usuario;
+import itson.ecommercedominio.dtos.UsuarioDTO;
+import itson.ecommercedominio.enumeradores.RolUsuario; // Asegúrate de tener este Enum
+import itson.ecommercenegocio.IUsuariosBO;
+import itson.ecommercenegocio.implementacion.UsuariosBO;
+import itson.ecommercenegocio.excepciones.NegocioException;
+import itson.ecommercepersistencia.IConexionBD;
+import itson.ecommercepersistencia.IUsuariosDAO;
+import itson.ecommercepersistencia.conexionBD.ConexionBD;
+import itson.ecommercepersistencia.implementaciones.UsuariosDAO;
 
 /**
  *
@@ -26,8 +30,8 @@ import DAO.UsuarioDAO;
  */
 public class UsuariosServlet extends HttpServlet {
 
-    private IUsuarioBO usuarioBO;
-    private IConexionDB conexionDB;
+    private IUsuariosBO usuariosBO;
+    private IConexionBD conexionDB;
 
     /**
      * El metodo init() se llama una sola vez cuando el Servlet es creado. Aqui
@@ -38,11 +42,11 @@ public class UsuariosServlet extends HttpServlet {
         // 1. Crear la conexion a la BD (false= no es la BD de prueba)
         this.conexionDB = new ConexionBD(false);
 
-        // 2. Crear el DAO. pasandole la conexion
-        UsuarioDAO usuarioDAO = new UsuarioDAO(this.conexionDB);
-
-        // 3. Crear el BO, pasandole el DAO
-        this.usuarioBO = new UsuarioBO(usuarioDAO);
+        // 2. Inyectar conexion al DAO
+        IUsuariosDAO usuariosDAO = new UsuariosDAO(this.conexionDB);
+        
+        // 3. Inyectar DAO al BO
+        this.usuariosBO = new UsuariosBO(usuariosDAO);
 
         System.out.println("UsuarioServlet inicializado y onectado a la BD.");
     }
@@ -153,29 +157,12 @@ public class UsuariosServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Establecer la codificacion de caracteres para manejar acentos y ñ
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
 
-        // 2. Obtener los parametros del formulario
-        // La cadena DEBE coincidir con el atribto "nombre" del <input> en registro.html
-        String nombre = request.getParameter("nombre");
-        String email = request.getParameter("email");
-        String direccion = request.getParameter("direccion");
-        String password = request.getParameter("password");
+        // Obtenemos la accion del formulario (campo hidden o boton)
         String accion = request.getParameter("accion");
 
-        // 3. Imprimir en la consola del servidor para depurar
-        // Esto aparecera en la terminal del servidor de aplicaciones (Tomcat)
-        System.out.println("--- Nuevo Registro Recibido ---");
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Email: " + email);
-        System.out.println("Direccion: " + direccion);
-        // NOTA: No imprimr contraseña porque puede que nos digan que hay problemas de seguridad
-//        System.out.println("Contrasenia: " + password);
-        System.out.println("-------------------------------");
-
-        // 4. Logica de negocio
+        // Logica de negocio
         if (accion == null) {
             processErrorRequest(response, "Accion desconocida.");
             return;
@@ -203,18 +190,19 @@ public class UsuariosServlet extends HttpServlet {
 
         try {
             // 2. Logica de Negocio
-            Usuario usuario = new Usuario();
-            usuario.setNombre(nombre);
-            usuario.setEmail(email);
-            usuario.setContrasenia(password);
-            usuario.setDireccion(direccion);
-            usuario.setTelefono(telefono);
-            usuario.setEsActivo(true);
-            usuario.setRolUsuario(Docs.RolUsuario.CLIENTE); // Cliente por defecto
+            Usuario usuarioNuevo = new Usuario();
+            usuarioNuevo.setNombre(nombre);
+            usuarioNuevo.setEmail(email);
+            usuarioNuevo.setContrasenia(password);
+            usuarioNuevo.setDireccion(direccion);
+            usuarioNuevo.setTelefono(telefono);
+            usuarioNuevo.setEsActivo(true);
+            usuarioNuevo.setRolUsuario(RolUsuario.CLIENTE); // Cliente por defecto
 
-            Usuario usuarioRegistrado = this.usuarioBO.crearUsuario(usuario);
+            UsuarioDTO usuarioRegistradoDTO = this.usuariosBO.crearUsuario(usuarioNuevo);
 
             // 3. Enviar respuesta de exito
+            response.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");
@@ -233,8 +221,8 @@ public class UsuariosServlet extends HttpServlet {
                 out.println("<body>");
                 out.println("<div class='container'>");
                 out.println("<h1>¡Registro Exitoso!</h1>");
-                out.println("<p>Bienvenido, <b>" + usuarioRegistrado.getNombre() + "</b>.</p>");
-                out.println("<p>Tu cuenta ha sido creada con el email: " + usuarioRegistrado.getEmail() + ".</p>");
+                out.println("<p>Bienvenido, <b>" + usuarioRegistradoDTO.getNombre() + "</b>.</p>");
+                out.println("<p>Tu cuenta ha sido creada con el email: " + usuarioRegistradoDTO.getEmail() + ".</p>");
                 out.println("<a href='login.html'>Iniciar Sesión Ahora</a>"); // Link a login
                 out.println("</div>");
                 out.println("</body>");
@@ -259,14 +247,14 @@ public class UsuariosServlet extends HttpServlet {
 
         try {
             // 2. Logica de Negocio: Autenticar
-            Usuario usuario = this.usuarioBO.obtenerUsuarioPorCredenciales(email, password);
+            UsuarioDTO usuarioDTO = this.usuariosBO.obtenerUsuarioPorCredenciales(email, password);
 
             // 3. Si las credenciales son correctas, iniciar sesion
             HttpSession session = request.getSession(true);
 
             // Guardamos el objeto Usuario completo en la sesion
             // Esto es util para mostrar su nombre en otras paginas
-            session.setAttribute("usuarioLogueado", usuario);
+            session.setAttribute("usuarioLogueado", usuarioDTO);
 
             // Establecemos un tiempo de inactividad (ej. 30 minutos)
             session.setMaxInactiveInterval(30 * 60);
