@@ -67,4 +67,18 @@ public class ReseniasDAO implements IReseniasDAO{
             throw new PersistenciaException("Error al obtener la reseña por producto.", e);
         } 
     }
+    
+    @Override
+    public ReseniaDTO obtenerReseniaPorId(ObjectId idResenia) throws PersistenciaException {
+        try {
+            Resenia resenia = coleccion.find(Filters.eq("_id", idResenia)).first();
+            if (resenia == null) {
+                return null;
+            }
+            return new ReseniaDTO(resenia);
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al buscar la reseña por ID.", e);
+        }
+    }
+    
 }

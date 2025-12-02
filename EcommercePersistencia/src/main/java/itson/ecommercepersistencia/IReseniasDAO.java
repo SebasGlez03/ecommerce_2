@@ -18,6 +18,7 @@ public interface IReseniasDAO {
     public ReseniaDTO obtenerReseniaPorUsuario(ObjectId idUsuario) throws PersistenciaException;
     public ReseniaDTO obtenerReseniaPorProducto(ObjectId idUsuario) throws PersistenciaException;
     public void eliminarResenia(ObjectId resenia) throws PersistenciaException ;
-    
+    public ReseniaDTO obtenerReseniaPorId(ObjectId idResenia) throws PersistenciaException;
+
     
 }

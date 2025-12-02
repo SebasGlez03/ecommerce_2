@@ -20,22 +20,40 @@ public class ReseniasBO  implements IReseniaBO{
         this.reseniasDAO = reseniasDAO;
     }
 
-    @Override
-    public void moderarResenia(String idReseniaString, UsuarioDTO usuarioSolicitante) throws NegocioException {
-
-        if (usuarioSolicitante == null || usuarioSolicitante.getRolUsuario() != RolUsuario.ADMIN) {
-            throw new NegocioException("Acceso denegado: Solo los administradores pueden moderar reseñas.");
-        }
-
-        try {
-            ObjectId idResenia = new ObjectId(idReseniaString);
-            reseniasDAO.eliminarResenia(idResenia);
-        } catch (IllegalArgumentException e) {
-             throw new NegocioException("ID de reseña inválido.");
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al eliminar la reseña: " + e.getMessage());
-        }
+@Override
+public void eliminarResenia(String idReseniaString, UsuarioDTO usuarioSolicitante) throws NegocioException {
+    
+    if (usuarioSolicitante == null) {
+        throw new NegocioException("Debes iniciar sesión para realizar esta acción.");
     }
+    
+    ObjectId idResenia;
+    try {
+        idResenia = new ObjectId(idReseniaString);
+    } catch (IllegalArgumentException e) {
+        throw new NegocioException("ID de reseña inválido.");
+    }
+
+    try {
+        ReseniaDTO resenia = reseniasDAO.obtenerReseniaPorId(idResenia);
+        
+        if (resenia == null) {
+            throw new NegocioException("La reseña que intentas eliminar no existe.");
+        }
+
+        boolean esAdmin = usuarioSolicitante.getRolUsuario() == RolUsuario.ADMIN;
+        boolean esPropietario = usuarioSolicitante.getId().equals(resenia.getIdUsuario());
+
+        if (!esAdmin && !esPropietario) {
+            throw new NegocioException("No tienes permiso para eliminar esta reseña.");
+        }
+
+        reseniasDAO.eliminarResenia(idResenia);
+
+    } catch (PersistenciaException e) {
+        throw new NegocioException("Error en la base de datos al eliminar la reseña: " + e.getMessage(), e);
+    }
+}
     
     @Override
     public void crearResenia(Resenia resenia) throws NegocioException {

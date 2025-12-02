@@ -14,7 +14,7 @@ import itson.ecommercenegocio.excepciones.NegocioException;
  */
 public interface IReseniaBO {
     
-    public void moderarResenia(String idReseniaString, UsuarioDTO usuarioSolicitante) throws NegocioException;
+    public void eliminarResenia(String idReseniaString, UsuarioDTO usuarioSolicitante) throws NegocioException;
     public void crearResenia(Resenia resenia) throws NegocioException;
 
 }
