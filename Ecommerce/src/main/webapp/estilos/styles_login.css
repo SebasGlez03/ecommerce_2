@@ -171,3 +171,21 @@ header {
     color: var(--color-txt-main);
     text-decoration: none;
 }
+
+.c_if_error {
+    background-color: #ffdddd;
+    color: #a00;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.c_if_exito {
+    background-color: #ddffdd;
+    color: #0a0;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}

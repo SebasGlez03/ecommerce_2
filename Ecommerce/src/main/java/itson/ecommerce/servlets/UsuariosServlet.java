@@ -44,7 +44,7 @@ public class UsuariosServlet extends HttpServlet {
 
         // 2. Inyectar conexion al DAO
         IUsuariosDAO usuariosDAO = new UsuariosDAO(this.conexionDB);
-        
+
         // 3. Inyectar DAO al BO
         this.usuariosBO = new UsuariosBO(usuariosDAO);
 
@@ -140,13 +140,20 @@ public class UsuariosServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("registro.html");
+
+        String accion = request.getParameter("accion");
+
+        if (accion != null && accion.equals("logout")){
+            this.manejarLogOut(request, response);
+        } else {
+            response.sendRedirect("login.jsp");
+        }
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * Este metodo se activa cuando el formulario registro.html es enviado.
+     * Este metodo se activa cuando el formulario registro.jsp es enviado.
      *
      * @param request servlet request
      * @param response servlet response
@@ -164,7 +171,7 @@ public class UsuariosServlet extends HttpServlet {
 
         // Logica de negocio
         if (accion == null) {
-            processErrorRequest(response, "Accion desconocida.");
+            response.sendRedirect("login.jsp");
             return;
         }
 
@@ -176,7 +183,7 @@ public class UsuariosServlet extends HttpServlet {
                 this.manejarLogin(request, response);
                 break;
             default:
-                processErrorRequest(response, "Accion desconocida.");
+                response.sendRedirect("login.jsp");
         }
     }
 
@@ -202,32 +209,36 @@ public class UsuariosServlet extends HttpServlet {
             UsuarioDTO usuarioRegistradoDTO = this.usuariosBO.crearUsuario(usuarioNuevo);
 
             // 3. Enviar respuesta de exito
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title>Registro Exitoso</title>");
-                out.println("<meta charset=\"UTF-8\">");
-                out.println("<style>");
-                out.println("body { font-family: Arial, sans-serif; display: grid; place-items: center; min-height: 90vh; background-color: #f9f9f9; }");
-                out.println(".container { padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }");
-                out.println("h1 { color: #2a7dc7; }");
-                out.println("p { font-size: 1.1em; }");
-                out.println("a { font-size: 1em; text-decoration: none; margin-top: 20px; display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; }");
-                out.println("a:hover { background-color: #0056b3; }");
-                out.println("</style>");
-                out.println("</head>");
-                out.println("<body>");
-                out.println("<div class='container'>");
-                out.println("<h1>¡Registro Exitoso!</h1>");
-                out.println("<p>Bienvenido, <b>" + usuarioRegistradoDTO.getNombre() + "</b>.</p>");
-                out.println("<p>Tu cuenta ha sido creada con el email: " + usuarioRegistradoDTO.getEmail() + ".</p>");
-                out.println("<a href='login.html'>Iniciar Sesión Ahora</a>"); // Link a login
-                out.println("</div>");
-                out.println("</body>");
-                out.println("</html>");
-            }
+            // TODO: El codigo comentado de la parte inferior muestra que el usuario se ha registrado correctamente
+            // response.setContentType("text/html;charset=UTF-8");
+            // try (PrintWriter out = response.getWriter()) {
+            //     out.println("<!DOCTYPE html>");
+            //     out.println("<html>");
+            //     out.println("<head>");
+            //     out.println("<title>Registro Exitoso</title>");
+            //     out.println("<meta charset=\"UTF-8\">");
+            //     out.println("<style>");
+            //     out.println("body { font-family: Arial, sans-serif; display: grid; place-items: center; min-height: 90vh; background-color: #f9f9f9; }");
+            //     out.println(".container { padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }");
+            //     out.println("h1 { color: #2a7dc7; }");
+            //     out.println("p { font-size: 1.1em; }");
+            //     out.println("a { font-size: 1em; text-decoration: none; margin-top: 20px; display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; }");
+            //     out.println("a:hover { background-color: #0056b3; }");
+            //     out.println("</style>");
+            //     out.println("</head>");
+            //     out.println("<body>");
+            //     out.println("<div class='container'>");
+            //     out.println("<h1>¡Registro Exitoso!</h1>");
+            //     out.println("<p>Bienvenido, <b>" + usuarioRegistradoDTO.getNombre() + "</b>.</p>");
+            //     out.println("<p>Tu cuenta ha sido creada con el email: " + usuarioRegistradoDTO.getEmail() + ".</p>");
+            //     out.println("<a href='login.jsp'>Iniciar Sesión Ahora</a>"); // Link a login
+            //     out.println("</div>");
+            //     out.println("</body>");
+            //     out.println("</html>");
+            // }
+
+            request.setAttribute("mensajeExito", "Cuenta creada! Inicia Sesion.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } catch (NegocioException e) {
             // 4. Manejar error de la logica de negocio (ej. email ya existe)
             System.err.println("Error en BO al registrar: " + e.getMessage());
@@ -259,8 +270,14 @@ public class UsuariosServlet extends HttpServlet {
             // Establecemos un tiempo de inactividad (ej. 30 minutos)
             session.setMaxInactiveInterval(30 * 60);
 
-            // 4. Redirigir al inicio
-            response.sendRedirect("index.html");
+            // 4. Redirigir al inicio segun el rol
+            if (usuarioDTO.getRolUsuario() == RolUsuario.ADMIN){
+                // TODO: Agregar este path para el "dashboard.jsp"
+                response.sendRedirect("admin/dashboard.jsp");
+            } else {
+                response.sendRedirect("index.jsp"); // Pagina principal
+            }
+
         } catch (NegocioException e) {
             // 5. Manejar error de BO (ej. Credenciales incorrectas, Usuario inactivo)
             System.err.println("Error en BO al iniciar sesion: " + e.getMessage());
@@ -271,6 +288,14 @@ public class UsuariosServlet extends HttpServlet {
             e.printStackTrace();
             processErrorRequest(response, "Ocurrio un error inesperado.");
         }
+    }
+
+    public void manejarLogOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // Destruye la sesion
+        }
+        response.sendRedirect("login.jsp");
     }
 
     /**
