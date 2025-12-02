@@ -4,14 +4,19 @@ package DAOTest;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
+import itson.ecommercedominio.Resenia;
 import itson.ecommercedominio.Usuario;
+import itson.ecommercedominio.dtos.ReseniaDTO;
 import itson.ecommercedominio.dtos.UsuarioDTO;
 import itson.ecommercedominio.enumeradores.RolUsuario;
 import itson.ecommercepersistencia.IConexionBD;
+import itson.ecommercepersistencia.IReseniasDAO;
 import itson.ecommercepersistencia.IUsuariosDAO;
 import itson.ecommercepersistencia.conexionBD.ConexionBD;
 import itson.ecommercepersistencia.excepciones.PersistenciaException;
+import itson.ecommercepersistencia.implementaciones.ReseniasDAO;
 import itson.ecommercepersistencia.implementaciones.UsuariosDAO;
+import java.util.Date;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,6 +32,7 @@ public class UsuariosDAOTest {
 
     public IConexionBD conexion;
     public IUsuariosDAO usuariosDAO;
+    public IReseniasDAO reseniasDAO;
 
     public static boolean BD_PRUEBA = true;
 
@@ -37,6 +43,8 @@ public class UsuariosDAOTest {
         conexion.getDatabase().getCollection("usuarios").drop();
 
         usuariosDAO = new UsuariosDAO(conexion);
+        reseniasDAO = new ReseniasDAO(conexion);
+        
     }
 
     @AfterEach
@@ -123,5 +131,36 @@ public class UsuariosDAOTest {
             System.out.println("Excepción esperada si no se encontró usuario: " + e);
         }
     }
+    
+    @Test
+    public void testCrearReseniaExitoso() throws PersistenciaException {
+        System.out.println("crearResenia");
+        UsuarioDTO usuarioAInsertar = new UsuarioDTO(
+                null, "Maria Test", "maria@test.com", "pass123", "Av Siempre Viva", "111", true, RolUsuario.ADMIN
+        );
+
+        try {
+        
+            usuariosDAO.crearUsuario(usuarioAInsertar);
+            UsuarioDTO usuarioEncontrado = usuariosDAO.obtenerUsuarioPorCredenciales("maria@test.com");
+            Date fechaActual = new Date();
+            Resenia reseniaAgregada = new Resenia(
+                    null, usuarioEncontrado.getId(), "Hola", 5, fechaActual
+            );
+
+            ReseniaDTO nuevaResenia = new ReseniaDTO(reseniaAgregada);
+            
+            reseniasDAO.agregarResenia(nuevaResenia);
+            ReseniaDTO reseniaEncontrada = reseniasDAO.obtenerReseniaPorUsuario(usuarioEncontrado.getId());
+            
+            assertEquals("Hola", reseniaEncontrada.getComentario());
+            assertEquals(5, reseniaEncontrada.getCalificacion());
+            assertEquals(fechaActual, reseniaEncontrada.getFecha());
+
+        } catch (PersistenciaException e) {
+            throw new PersistenciaException("No debio lanzar excepcion: " + e.getMessage());
+        }
+    }
+
 
 }
