@@ -22,22 +22,9 @@
                 </a>
             </div>
 
-            <!-- TODO: Agregar a donde va cada link -->
-            <nav class="nav_items">
-                <a href="">Item1</a>
-                <a href="">Item2</a>
-                <a href="">Item3</a>
-            </nav>
-
             <nav class="nav_items">
                 <a href="index.jsp">Inicio</a>
             </nav>
-
-            <div class="user_section">
-            <a class="login_btn" href="login.html">Iniciar Sesión</a>
-            <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png"
-                alt="Avatar de usuario">
-        </div>
         </header>
 
         <div class="contenedor_login">
