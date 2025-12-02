@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vista de Producto - Ecommerce</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
+    
+    <!-- Iconos para flechas y carrito  -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="estilos/styles_productos.css">
+
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="https://soendergaard.com/wp-content/uploads/2024/06/logoipsum-logo-29-1.png" alt="Logo">
+            </a>
+        </div>
+
+        <nav class="nav_items">
+            <a href="">Item 1</a>
+            <a href="">Item 2</a>
+            <a href="">Item 3</a>
+        </nav>
+
+        <div class="search_container">
+            <input type="text" placeholder="">
+            <i data-lucide="search" style="width: 18px; color: var(--color-txt-secondary);"></i>
+        </div>
+
+        <div class="user_section">
+            <a class="login_btn" href="login.html">Iniciar Sesión</a>
+            <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png" alt="Avatar">
+        </div>
+    </header>
+
+    <div class="contenedor">
+        <!-- Sidebar -->
+        <div class="categorias">
+            <h3 id="titulo_categorias">Categorías</h3>
+            <a class="categorias_disponibles" href="">Audífonos</a>
+            <a class="categorias_disponibles" href="">Monitores</a>
+            <a class="categorias_disponibles" href="">Teclados</a>
+            <a class="categorias_disponibles" href="">Ratones</a>
+            <a class="categorias_disponibles" href="">Sillas</a>
+        </div>
+
+        <!-- Área Principal -->
+        <div class="product_view_container">
+            
+            <!-- Galería y Detalles -->
+            <div class="product_gallery">
+                <div class="main_image_container">
+                    <img src="https://ddtech.mx/assets/uploads/f85223743453736762382415170425c8.jpg" alt="MSI Laptop" class="main_image">
+                </div>
+                
+                <div class="thumbnail_slider">
+                    <div class="nav_arrow">«</div>
+                    <div class="thumbnail active">
+                        <img src="https://ddtech.mx/assets/uploads/f85223743453736762382415170425c8.jpg" alt="Thumb 1">
+                    </div>
+                    <div class="thumbnail">
+                        <img src="https://ddtech.mx/assets/uploads/e4501a91e5c00e70a316279f3237a85e.jpg" alt="Thumb 2">
+                    </div>
+                    <div class="thumbnail">
+                        <img src="https://ddtech.mx/assets/uploads/74e899216124e414c4c23c14a275f469.jpg" alt="Thumb 3">
+                    </div>
+                    <div class="nav_arrow">»</div>
+                </div>
+            </div>
+
+            <div class="product_details">
+                <h1 class="product_title">Laptop MSI VECTOR 16 HX AI A2XWIG-400US</h1>
+                <div class="availability">Disponible</div>
+                <p class="product_description">
+                    Laptop MSI VECTOR 16 HX AI A2XWIG-400US / Intel Ultra 9-275HX / 16G de Ram / RTX 4060.
+                    Alto rendimiento para gaming y tareas profesionales con la última tecnología de IA.
+                </p>
+                <hr class="divider">
+                <div class="product_price">$13,500</div>
+                <div class="tax_info">+IVA</div>
+                <hr class="divider">
+                <div class="purchase_controls">
+                    <div class="qty_selector">
+                        <span>Cantidad:</span>
+                        <input type="number" class="qty_input" value="2" min="1">
+                    </div>
+                    <button class="add_to_cart_btn">
+                        Agregar al carrito
+                        <i data-lucide="shopping-cart" style="width: 18px;"></i>
+                    </button>
+                    <a href="#reseñas" class="reviews_link">Reseñas</a>
+                </div>
+            </div>
+
+            <!-- Sección de Reseñas -->
+            <div id="reseñas" class="reviews_section_container">
+                <h2 class="reviews_header">Opiniones de clientes</h2>
+                <hr class="reviews_divider">
+
+                <div class="reviews_top_area">
+                    <!-- Resumen de Calificaciones -->
+                    <div class="ratings_summary">
+                        <!-- 5 Estrellas -->
+                        <div class="rating_row">
+                            <span class="rating_label">5</span>
+                            <i data-lucide="star" style="width: 12px; margin-left:2px;"></i>
+                            <div class="progress_bar_bg">
+                                <div class="progress_bar_fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="rating_count">2</span>
+                        </div>
+                        <!-- 4 Estrellas -->
+                        <div class="rating_row">
+                            <span class="rating_label">4</span>
+                            <i data-lucide="star" style="width: 12px; margin-left:2px;"></i>
+                            <div class="progress_bar_bg">
+                                <div class="progress_bar_fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="rating_count">0</span>
+                        </div>
+                        <!-- 3 Estrellas -->
+                        <div class="rating_row">
+                            <span class="rating_label">3</span>
+                            <i data-lucide="star" style="width: 12px; margin-left:2px;"></i>
+                            <div class="progress_bar_bg">
+                                <div class="progress_bar_fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="rating_count">0</span>
+                        </div>
+                        <!-- 2 Estrellas -->
+                        <div class="rating_row">
+                            <span class="rating_label">2</span>
+                            <i data-lucide="star" style="width: 12px; margin-left:2px;"></i>
+                            <div class="progress_bar_bg">
+                                <div class="progress_bar_fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="rating_count">0</span>
+                        </div>
+                        <!-- 1 Estrella -->
+                        <div class="rating_row">
+                            <span class="rating_label">1</span>
+                            <i data-lucide="star" style="width: 12px; margin-left:2px;"></i>
+                            <div class="progress_bar_bg">
+                                <div class="progress_bar_fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="rating_count">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Caja para dejar opinión -->
+                    <div class="leave_review_box">
+                        <div class="leave_review_title">Deja tu opinion</div>
+                        <textarea class="review_input"></textarea>
+                        <div class="review_actions">
+                            <div class="rating_row" style="margin-bottom:0;">
+                                <span style="font-size:12px; font-weight:bold; margin-right:5px;">1</span>
+                                <div class="review_stars_display" style="-webkit-text-stroke: 1px white;">
+                                    <i data-lucide="star" style="width: 16px;"></i>
+                                    <i data-lucide="star" style="width: 16px;"></i>
+                                    <i data-lucide="star" style="width: 16px;"></i>
+                                    <i data-lucide="star" style="width: 16px;"></i>
+                                    <i data-lucide="star" style="width: 16px;"></i>
+                                </div>
+                                <span style="font-size:12px; font-weight:bold; margin-left:5px;">5</span>
+                            </div>
+                            <button class="btn_submit_review">
+                                Enviar
+                                <i data-lucide="send" style="width: 12px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Reseñas -->
+                <!-- Reseña 1 -->
+                <div class="review_card">
+                    <div class="reviewer_info">
+                        <div class="reviewer_avatar">
+                            <i data-lucide="user" style="color: black;"></i>
+                        </div>
+                        <div class="reviewer_name">Carlos Sandoval</div>
+                        <div class="review_date">23/11/2024</div>
+                    </div>
+                    <div class="review_content">
+                        <div class="review_text">
+                            La compré porque buscaba una laptop ligera pero potente y esta es sin duda lo que buscaba. La duración de la batería es de lo mejor. Ninguna laptop windows tiene esa duración de batería como la mac. Además es muy potente, la uso para trabajar como desarrollador de software y funciona muy bien.
+                        </div>
+                        <div class="review_footer">
+                            <div class="review_stars_display" style="-webkit-text-stroke: 1px orange;">
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                            </div>
+                            <div class="review_interaction">
+                                <i data-lucide="thumbs-up" class="interaction_btn" style="width: 18px;"></i>
+                                <i data-lucide="thumbs-down" class="interaction_btn" style="width: 18px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña 2 -->
+                <div class="review_card">
+                    <div class="reviewer_info">
+                        <div class="reviewer_avatar">
+                            <i data-lucide="user" style="color: black;"></i>
+                        </div>
+                        <div class="reviewer_name">Maria Perez</div>
+                        <div class="review_date">04/02/2025</div>
+                    </div>
+                    <div class="review_content">
+                        <div class="review_text">
+                            Todo lo que se busca en una laptop portátil lo tiene esta MacBook, buena autonomía (de lo mejor que he visto en el rango de precio), suficiente potencia, capacidad del SSD decente, en fin. Una laptop que sin duda te hará sentir satisfecho por las especificaciones que tiene. Saludos!
+                        </div>
+                        <div class="review_footer">
+                            <div class="review_stars_display" style="-webkit-text-stroke: 1px orange;">
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                                <i data-lucide="star" style="width: 16px;"></i>
+                            </div>
+                            <div class="review_interaction">
+                                <i data-lucide="thumbs-up" class="interaction_btn" style="width: 18px;"></i>
+                                <i data-lucide="thumbs-down" class="interaction_btn" style="width: 18px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Fin sección reseñas -->
+
+        </div>
+    </div>
+
+    <div class="contenedor_inferior">
+        <footer class="footer">
+            <p>&copy; 2025 Ecommerce. Todos los derechos reservados.</p>
+            <p>Hecho por Equipo #2</p>
+        </footer>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
