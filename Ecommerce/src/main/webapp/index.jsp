@@ -26,7 +26,6 @@
                 <a href="#">Categorías</a>
                 <a href="#">Ofertas</a>
 
-                <!-- TODO: No se si vaya a funcionar esto, porque estamos hardcodeando el "ADMIN" en lugar de agregar rolUsuario.Admin -->
                 <c:if test="${sessionScope.usuarioLogueado.rolUsuario == 'ADMIN'}">
                     <a href="admin/dashboard.jsp" style="color: red; font-weight: bold;">Panel Admin</a>
                 </c:if>
