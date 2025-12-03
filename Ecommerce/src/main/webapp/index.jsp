@@ -35,7 +35,7 @@
                     <c:choose>
                         <c:when test="${not empty sessionScope.usuarioLogueado}">
                             <span style="margin-right: 15px;">Hola, <b>${sessionScope.usuarioLogueado.nombre}</b></span>
-                            <a class="login_btn" href="UsuariosServlet?accion=logout" style="background-color: #dc3545;">Cerrar Sesión</a>
+                            <a class="login_btn" href="usuarios?accion=logout" style="background-color: #dc3545;">Cerrar Sesión</a>
                         </c:when>
                         <c:otherwise>
                             <a class="login_btn" href="login.jsp">Iniciar Sesión</a>
