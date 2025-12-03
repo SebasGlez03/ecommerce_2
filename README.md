@@ -13,4 +13,4 @@ Equipo conformado por:<br>
     <h3>Diagrama de clases de dominio<h3>
 </div>
 
-![Diagrama de Clases](/gitAssets/Diagrama%20de%20clases%20de%20dominio%20(Proyecto%20Final).png)
+![Diagrama de Clases](/gitAssets/Diagrama%20de%20clases%20de%20dominio%20(Proyecto%20Final).jpg)
