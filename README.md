@@ -7,7 +7,7 @@ Equipo conformado por:<br>
 - Cuauhtémoc Vázquez<br>
 - Eduardo Samoano<br>
 
-<a href="#diagrama_dominio"><kbd>Diagrama Dominio</kbd></a><br><br>
+<a href="#diagrama_dominio"><kbd>Diagrama Dominio</kbd></a><br>
 <a href="#diagrama_mer"><kbd>Diagrama MER</kbd></a><br><br>
 
 <div id="diagrama_dominio">
