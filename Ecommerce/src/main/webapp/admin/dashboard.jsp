@@ -25,7 +25,7 @@
             </div>
             <div class="user_section">
                 <span>Admin: <b>${sessionScope.usuarioLogueado.nombre}</b></span>
-                <a class="login_btn" href="../UsuariosServlet?accion=logout" style="background-color: #dc3545;">Salir</a>
+                <a class="login_btn" href="../usuarios?accion=logout" style="background-color: #dc3545;">Salir</a>
             </div>
         </header>
 
