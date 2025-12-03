@@ -26,6 +26,28 @@ public class Compra {
     public Compra() {
     }
 
+    public Compra(ObjectId usuarioId, Date fechaCompra, EstadoCompra estado, Double total, String direccionEnvio, String metodoPago, List<DetalleCompra> detalles) {
+        this.usuarioId = usuarioId;
+        this.fechaCompra = fechaCompra;
+        this.estado = estado;
+        this.total = total;
+        this.direccionEnvio = direccionEnvio;
+        this.metodoPago = metodoPago;
+        this.detalles = detalles;
+    }
+
+    public Compra(ObjectId usuarioId, String direccionEnvio, String metodoPago, Double total, List<DetalleCompra> detalles) {
+        this.usuarioId = usuarioId;
+        this.direccionEnvio = direccionEnvio;
+        this.metodoPago = metodoPago;
+        this.total = total;
+        this.detalles = detalles;
+
+        // Inicializados aquí
+        this.fechaCompra = new Date(); 
+        this.estado = EstadoCompra.PENDIENTE; 
+    }    
+
     public Compra(ObjectId id, ObjectId usuarioId, Date fechaCompra, EstadoCompra estado, Double total, String direccionEnvio, String metodoPago, List<DetalleCompra> detalles) {
         this.id = id;
         this.usuarioId = usuarioId;

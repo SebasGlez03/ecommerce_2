@@ -22,12 +22,34 @@ public class CompraDTO {
     private Double total;
     private String direccionEnvio;
     private String metodoPago;
-    private List<DetalleCompra> detalles;
+    private List<DetalleCompraDTO> detalles;
 
     public CompraDTO() {
     }
 
-    public CompraDTO(ObjectId id, ObjectId usuarioId, Date fechaCompra, EstadoCompra estado, Double total, String direccionEnvio, String metodoPago, List<DetalleCompra> detalles) {
+    public CompraDTO(ObjectId usuarioId, Date fechaCompra, EstadoCompra estado, Double total, String direccionEnvio, String metodoPago, List<DetalleCompraDTO> detalles) {
+        this.usuarioId = usuarioId;
+        this.fechaCompra = fechaCompra;
+        this.estado = estado;
+        this.total = total;
+        this.direccionEnvio = direccionEnvio;
+        this.metodoPago = metodoPago;
+        this.detalles = detalles;
+    }
+    
+    public CompraDTO (ObjectId usuarioId, String direccionEnvio, String metodoPago, Double total, List<DetalleCompraDTO> detalles) {
+        this.usuarioId = usuarioId;
+        this.direccionEnvio = direccionEnvio;
+        this.metodoPago = metodoPago;
+        this.total = total;
+        this.detalles = detalles;
+
+        // Inicializados aquí
+        this.fechaCompra = new Date(); 
+        this.estado = EstadoCompra.PENDIENTE; 
+    } 
+
+    public CompraDTO(ObjectId id, ObjectId usuarioId, Date fechaCompra, EstadoCompra estado, Double total, String direccionEnvio, String metodoPago, List<DetalleCompraDTO> detalles) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.fechaCompra = fechaCompra;
@@ -94,11 +116,11 @@ public class CompraDTO {
         this.metodoPago = metodoPago;
     }
 
-    public List<DetalleCompra> getDetalles() {
+    public List<DetalleCompraDTO> getDetalles() {
         return detalles;
     }
 
-    public void setDetalles(List<DetalleCompra> detalles) {
+    public void setDetalles(List<DetalleCompraDTO> detalles) {
         this.detalles = detalles;
     }
 }

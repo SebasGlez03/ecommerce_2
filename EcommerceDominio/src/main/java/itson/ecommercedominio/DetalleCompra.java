@@ -19,7 +19,16 @@ public class DetalleCompra {
 
     public DetalleCompra() {
     }
-
+    
+    public DetalleCompra(ObjectId productoId, String nombreProducto, Integer cantidad, Double precioUnitario) {
+        this.productoId = productoId;
+        this.nombreProducto = nombreProducto;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+        // Inicializado aquí tmbn
+        this.subtotal = precioUnitario * cantidad;
+    }
+    
     public DetalleCompra(ObjectId productoId, String nombreProducto, Integer cantidad, Double precioUnitario, Double subtotal) {
         this.productoId = productoId;
         this.nombreProducto = nombreProducto;

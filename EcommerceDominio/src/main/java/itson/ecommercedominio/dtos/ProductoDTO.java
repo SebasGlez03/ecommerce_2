@@ -20,12 +20,20 @@ public class ProductoDTO {
     private Integer stock;
     private Categoria categoria;
     private String imagenUrl;
-    private Date fechaCreacion;
 
     public ProductoDTO() {
     }
 
-    public ProductoDTO(ObjectId id, String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl, Date fechaCreacion) {
+    public ProductoDTO(String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.stock = stock;
+        this.categoria = categoria;
+        this.imagenUrl = imagenUrl;
+    }
+
+    public ProductoDTO(ObjectId id, String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -33,7 +41,6 @@ public class ProductoDTO {
         this.stock = stock;
         this.categoria = categoria;
         this.imagenUrl = imagenUrl;
-        this.fechaCreacion = fechaCreacion;
     }
 
     public ObjectId getId() {
@@ -90,13 +97,5 @@ public class ProductoDTO {
 
     public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
     }
 }
