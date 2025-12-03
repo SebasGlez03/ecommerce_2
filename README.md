@@ -14,3 +14,4 @@ Equipo conformado por:<br>
 </div>
 
 ![Diagrama de Clases](/gitAssets/Diagrama%20de%20clases%20de%20dominio%20(Proyecto%20Final).png)
+![Diagrama Modelo Entidad Relacion](/gitAssets/Diagrama%20entidad%20Relacion.jpg)
