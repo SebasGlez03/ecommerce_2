@@ -209,7 +209,7 @@ public class UsuariosServlet extends HttpServlet {
             UsuarioDTO usuarioRegistradoDTO = this.usuariosBO.crearUsuario(usuarioNuevo);
 
             // 3. Enviar respuesta de exito
-            // TODO: El codigo comentado de la parte inferior muestra que el usuario se ha registrado correctamente
+            // El codigo comentado de la parte inferior muestra que el usuario se ha registrado correctamente
             // response.setContentType("text/html;charset=UTF-8");
             // try (PrintWriter out = response.getWriter()) {
             //     out.println("<!DOCTYPE html>");
@@ -272,7 +272,6 @@ public class UsuariosServlet extends HttpServlet {
 
             // 4. Redirigir al inicio segun el rol
             if (usuarioDTO.getRolUsuario() == RolUsuario.ADMIN){
-                // TODO: Agregar este path para el "dashboard.jsp"
                 response.sendRedirect("admin/dashboard.jsp");
             } else {
                 response.sendRedirect("index.jsp"); // Pagina principal
