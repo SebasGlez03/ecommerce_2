@@ -7,12 +7,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Iniciar Sesión.</title>
+        <title>Iniciar Sesión</title>
         <link rel="stylesheet" href="estilos/styles_login.css">
+        <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body>
         <header>
@@ -23,14 +24,23 @@
             </div>
 
             <nav class="nav_items">
-                <a href="index.jsp">Inicio</a>
+                <a href="index.jsp">Volver al Inicio</a>
             </nav>
+
+            <div class="search_container" style="visibility: hidden; opacity: 0;">
+                <input type="text">
+            </div>
+
+            <div class="user_section">
+                <a class="login_btn" href="registro.jsp" style="font-weight: bold;">Registrarse</a>
+                <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png" alt="Avatar">
+            </div>
         </header>
 
         <div class="contenedor_login">
             <form class="login_form" action="usuarios" method="POST">
                 <h2>Iniciar Sesión</h2>
-
+                
                 <c:if test="${not empty error}">
                     <div class="c_if_error">${error}</div>
                 </c:if>
@@ -42,12 +52,12 @@
 
                 <div class="form_group">
                     <label for="email">Correo Electrónico:</label>
-                    <input type="email" name="email" id="email" required>
+                    <input type="email" name="email" id="email" required placeholder="ejemplo@correo.com">
                 </div>
 
                 <div class="form_group">
                     <label for="password">Contraseña:</label>
-                    <input type="password" name="password" id="password" required>
+                    <input type="password" name="password" id="password" required placeholder="********">
                 </div>
 
                 <button type="submit" class="submit_btn">Ingresar</button>
@@ -57,5 +67,6 @@
                 </div>
             </form>
         </div>
+        <script>lucide.createIcons();</script>
     </body>
 </html>
