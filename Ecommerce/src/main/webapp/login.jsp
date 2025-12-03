@@ -28,13 +28,13 @@
         </header>
 
         <div class="contenedor_login">
-            <form class="login_form" action="UsuariosServlet" method="POST">
+            <form class="login_form" action="usuarios" method="POST">
                 <h2>Iniciar Sesión</h2>
 
                 <c:if test="${not empty error}">
                     <div class="c_if_error">${error}</div>
                 </c:if>
-                <c:if>
+                <c:if test="${not empty mensajeExito}">
                     <div class="c_if_exito">${mensajeExito}</div>
                 </c:if>
 

@@ -19,7 +19,7 @@
         </header>
 
         <div class="contenedor_login">
-            <form class="login_form" action="UsuariosServlet" method="POST">
+            <form class="login_form" action="usuarios" method="POST">
                 <h2>Registro</h2>
 
                 <c:if test="${not empty error}">
