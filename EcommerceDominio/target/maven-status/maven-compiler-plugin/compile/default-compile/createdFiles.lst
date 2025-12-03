@@ -1,3 +1,5 @@
-itson\ecommercedominio\dtos\UsuarioDTO.class
+itson\ecommercedominio\dtos\ReseniaDTO.class
 itson\ecommercedominio\enumeradores\RolUsuario.class
 itson\ecommercedominio\Usuario.class
+itson\ecommercedominio\Resenia.class
+itson\ecommercedominio\dtos\UsuarioDTO.class
