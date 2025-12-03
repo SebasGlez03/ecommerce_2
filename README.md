@@ -7,7 +7,8 @@ Equipo conformado por:<br>
 - Cuauhtémoc Vázquez<br>
 - Eduardo Samoano<br>
 
-<a href="#diagrama_dominio"><kbd>Diagrama</kbd></a>
+<a href="#diagrama_dominio"><kbd>Diagrama Dominio</kbd></a><br><br>
+<a href="#diagrama_mer"><kbd>Diagrama MER</kbd></a><br><br>
 
 <div id="diagrama_dominio">
     <h3>Diagrama de clases de dominio<h3>
