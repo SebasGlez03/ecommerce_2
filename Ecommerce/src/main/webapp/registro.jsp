@@ -15,7 +15,11 @@
     </head>
     <body>
         <header>
-            <div class="logo"><a href="index.jsp">Logo</a></div>
+            <div class="logo">
+                <a href="index.jsp">
+                    <img src="https://soendergaard.com/wp-content/uploads/2024/06/logoipsum-logo-29-1.png" alt="Logo">
+                </a>
+            </div>
         </header>
 
         <div class="contenedor_login">
