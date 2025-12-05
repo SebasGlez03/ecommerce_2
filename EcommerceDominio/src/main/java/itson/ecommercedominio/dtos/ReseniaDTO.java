@@ -6,37 +6,39 @@ import java.util.Date;
 
 public class ReseniaDTO {
     private ObjectId id;
-//    private ObjectId idProducto; 
+    private ObjectId idProducto; 
     private ObjectId idUsuario; 
     private String comentario;
     private int calificacion;
     private Date fecha;
 
-    public ReseniaDTO() {}
-
-    public ReseniaDTO(ObjectId id, ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
-        this.id = id;
-        this.idUsuario = idUsuario;
-        this.comentario = comentario;
-        this.calificacion = calificacion;
-        this.fecha = fecha;
-    }
-
-    public ReseniaDTO(ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
-        this.idUsuario = idUsuario;
-        this.comentario = comentario;
-        this.calificacion = calificacion;
-        this.fecha = fecha;
+    public ReseniaDTO() {
     }
     
-    public ReseniaDTO(Resenia resenia){
-    
+    public ReseniaDTO(Resenia resenia) {
         this.id = resenia.getId();
+        this.idProducto = resenia.getIdProducto();
         this.idUsuario = resenia.getIdUsuario();
         this.comentario = resenia.getComentario();
         this.calificacion = resenia.getCalificacion();
         this.fecha = resenia.getFecha();
-        
+    }
+
+    public ReseniaDTO(ObjectId idProducto, ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
+        this.idProducto = idProducto;
+        this.idUsuario = idUsuario;
+        this.comentario = comentario;
+        this.calificacion = calificacion;
+        this.fecha = fecha;
+    }
+
+    public ReseniaDTO(ObjectId id, ObjectId idProducto, ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
+        this.id = id;
+        this.idProducto = idProducto;
+        this.idUsuario = idUsuario;
+        this.comentario = comentario;
+        this.calificacion = calificacion;
+        this.fecha = fecha;
     }
 
     public ObjectId getId() {
@@ -45,6 +47,14 @@ public class ReseniaDTO {
 
     public void setId(ObjectId id) {
         this.id = id;
+    }
+
+    public ObjectId getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(ObjectId idProducto) {
+        this.idProducto = idProducto;
     }
 
     public ObjectId getIdUsuario() {
@@ -78,6 +88,4 @@ public class ReseniaDTO {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
-
 }

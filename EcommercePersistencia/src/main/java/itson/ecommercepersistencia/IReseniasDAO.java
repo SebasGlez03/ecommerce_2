@@ -6,6 +6,7 @@ package itson.ecommercepersistencia;
 
 import itson.ecommercedominio.dtos.ReseniaDTO;
 import itson.ecommercepersistencia.excepciones.PersistenciaException;
+import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
@@ -13,12 +14,10 @@ import org.bson.types.ObjectId;
  * @author santi
  */
 public interface IReseniasDAO {
-    
     public void agregarResenia(ReseniaDTO resenia) throws PersistenciaException;
-    public ReseniaDTO obtenerReseniaPorUsuario(ObjectId idUsuario) throws PersistenciaException;
-    public ReseniaDTO obtenerReseniaPorProducto(ObjectId idUsuario) throws PersistenciaException;
-    public void eliminarResenia(ObjectId resenia) throws PersistenciaException ;
+    public List<ReseniaDTO> obtenerReseniasPorProducto(ObjectId idProducto) throws PersistenciaException;
     public ReseniaDTO obtenerReseniaPorId(ObjectId idResenia) throws PersistenciaException;
-
-    
+    public void eliminarResenia(ObjectId idResenia) throws PersistenciaException;
+    public ReseniaDTO obtenerReseniaPorUsuario(ObjectId idUsuario) throws PersistenciaException;
+    public List<ReseniaDTO> obtenerReseniasPorUsuario(ObjectId idUsuario) throws PersistenciaException;    
 }

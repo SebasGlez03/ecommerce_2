@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 
 // Imports de tus capas
 import itson.ecommercedominio.Resenia;
+import itson.ecommercedominio.dtos.ReseniaDTO;
 import itson.ecommercedominio.dtos.UsuarioDTO;
 import itson.ecommercenegocio.IReseniaBO;
 import itson.ecommercenegocio.implementacion.ReseniasBO;
@@ -18,32 +19,30 @@ import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercepersistencia.IConexionBD;
 import itson.ecommercepersistencia.conexionBD.ConexionBD;
 import itson.ecommercepersistencia.implementaciones.ReseniasDAO;
+import jakarta.servlet.annotation.WebServlet;
 import org.bson.types.ObjectId;
 
 /**
  * Servlet para manejar la creación y moderación de reseñas.
  */
+@WebServlet(name = "ReseniasServlet", urlPatterns = {"/resenias"})
 public class ReseniasServlet extends HttpServlet {
 
     private IReseniaBO reseniasBO;
-    private IConexionBD conexionDB;
+    private IConexionBD conexion;
 
     @Override
     public void init() throws ServletException {
         // 1. Inicializar conexión (false = BD real)
-        this.conexionDB = new ConexionBD(false);
-
-        // 2. Inyectar dependencias: Conexión -> DAO -> BO
-        ReseniasDAO reseniasDAO = new ReseniasDAO(this.conexionDB);
-        this.reseniasBO = new ReseniasBO(reseniasDAO);
-
+        this.conexion = new ConexionBD(false);
+        this.reseniasBO = new ReseniasBO(new ReseniasDAO(conexion));
         System.out.println("ReseniasServlet inicializado.");
     }
 
     @Override
     public void destroy() {
-        if (this.conexionDB != null) {
-            this.conexionDB.close();
+        if (this.conexion != null) {
+            this.conexion.close();
         }
     }
 
@@ -55,7 +54,8 @@ public class ReseniasServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Por seguridad, redirigir al inicio si intentan acceder por GET directamente
+        response.sendRedirect("index.jsp");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ReseniasServlet extends HttpServlet {
         String accion = request.getParameter("accion");
 
         if (accion == null) {
-            processErrorRequest(response, "Acción no especificada.");
+            response.sendRedirect("index.jsp");
             return;
         }
 
@@ -78,7 +78,7 @@ public class ReseniasServlet extends HttpServlet {
                 eliminarResenia(request, response);
                 break;
             default:
-                processErrorRequest(response, "Acción desconocida.");
+                response.sendRedirect("index.jsp");
         }
     }
 
@@ -88,67 +88,82 @@ public class ReseniasServlet extends HttpServlet {
         UsuarioDTO usuario = (session != null) ? (UsuarioDTO) session.getAttribute("usuarioLogueado") : null;
 
         if (usuario == null) {
-            // Si no hay usuario logueado, mandar al login
-            response.sendRedirect("login.html");
+            // Guardar la URL actual para volver después del login (opcional)
+            response.sendRedirect("login.jsp");
             return;
         }
 
         // 2. Obtener parámetros del formulario
         String comentario = request.getParameter("comentario");
         String calificacionStr = request.getParameter("calificacion");
-        
-        // NOTA: Idealmente aquí recibirías el "idProducto" también, pero 
-        // tu clase Resenia.java actual tiene ese campo comentado.
+        String idProductoStr = request.getParameter("idProducto"); // ¡Importante!
 
         try {
+            // Conversiones
             int calificacion = Integer.parseInt(calificacionStr);
+            ObjectId idProducto = new ObjectId(idProductoStr);
 
-            // 3. Crear objeto de Dominio
-            Resenia nuevaResenia = new Resenia();
-            nuevaResenia.setId(new ObjectId()); // Generar ID nuevo
-            nuevaResenia.setIdUsuario(usuario.getId());
-            nuevaResenia.setComentario(comentario);
-            nuevaResenia.setCalificacion(calificacion);
-            nuevaResenia.setFecha(new Date()); // Fecha actual
+            // 3. Crear DTO (No Entidad)
+            ReseniaDTO nuevaReseniaDTO = new ReseniaDTO();
+            // El ID se puede generar aquí o dejar que el DAO lo haga si lo configuras así
+            // Por consistencia con tu DAO actual, generamos uno nuevo:
+            nuevaReseniaDTO.setId(new ObjectId());
+            
+            nuevaReseniaDTO.setIdUsuario(usuario.getId());
+            nuevaReseniaDTO.setIdProducto(idProducto);
+            nuevaReseniaDTO.setComentario(comentario);
+            nuevaReseniaDTO.setCalificacion(calificacion);
+            nuevaReseniaDTO.setFecha(new Date()); // Fecha actual
 
-            // 4. Llamar a Negocio
-            reseniasBO.crearResenia(nuevaResenia);
+            // 4. Llamar al BO
+            reseniasBO.crearResenia(nuevaReseniaDTO);
 
-            // 5. Redirigir al producto (usamos referer para volver a la misma página)
+            // 5. Redirigir al producto
+            // Usamos 'referer' para volver exactamente a la página donde estábamos
             String referer = request.getHeader("Referer");
-            response.sendRedirect(referer != null ? referer : "producto.html");
+            response.sendRedirect(referer != null ? referer : "productos?accion=ver&id=" + idProductoStr);
 
         } catch (NumberFormatException e) {
-            processErrorRequest(response, "La calificación debe ser un número entero.");
+            // Error de formato en números
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Calificación inválida.");
+        } catch (IllegalArgumentException e) {
+            // Error en ObjectId
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de producto inválido.");
         } catch (NegocioException e) {
-            processErrorRequest(response, "Error al guardar la reseña: " + e.getMessage());
+            // Error de lógica de negocio (ej. comentario vacío)
+            request.setAttribute("error", e.getMessage());
+            // Idealmente reenviar al JSP, pero como es un POST desde detalle, 
+            // un redirect con error en parámetro o sesión es más simple por ahora:
+            String referer = request.getHeader("Referer");
+            response.sendRedirect((referer != null ? referer : "index.jsp") + "&error=" + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            processErrorRequest(response, "Ocurrió un error inesperado.");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inesperado al guardar reseña.");
         }
     }
 
     private void eliminarResenia(HttpServletRequest request, HttpServletResponse response) throws IOException {
-            String idResenia = request.getParameter("idResenia");
+        String idResenia = request.getParameter("idResenia");
 
-            // Obtenemos al usuario de la sesión actual
-            HttpSession session = request.getSession(false);
-            UsuarioDTO usuarioLogueado = (session != null) ? (UsuarioDTO) session.getAttribute("usuarioLogueado") : null;
+        HttpSession session = request.getSession(false);
+        UsuarioDTO usuarioLogueado = (session != null) ? (UsuarioDTO) session.getAttribute("usuarioLogueado") : null;
 
-            try {
-                // Llamamos al método unificado en el BO
-                reseniasBO.eliminarResenia(idResenia, usuarioLogueado);
+        try {
+            // El BO valida permisos (Admin o Dueño) y formato de ID
+            reseniasBO.eliminarResenia(idResenia, usuarioLogueado);
 
-                // Redirigir de vuelta a la página anterior (el producto)
-                String referer = request.getHeader("Referer");
-                response.sendRedirect(referer != null ? referer : "index.html");
+            // Redirigir
+            String referer = request.getHeader("Referer");
+            response.sendRedirect(referer != null ? referer : "index.jsp");
 
-            } catch (NegocioException e) {
-                e.printStackTrace();
-                // Podrías redirigir a una página de error o enviar un 403
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-            }
+        } catch (NegocioException e) {
+            // Si no tiene permisos o no existe
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("index.jsp");
         }
+    }
 
     // Método auxiliar para mostrar errores simples
     protected void processErrorRequest(HttpServletResponse response, String mensaje)

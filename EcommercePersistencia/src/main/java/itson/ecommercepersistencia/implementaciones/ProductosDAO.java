@@ -38,6 +38,7 @@ public class ProductosDAO implements IProductosDAO{
         try {
             // 1. Convertir DTO a Entidad para guardar en BD
             Producto p = new Producto(
+                new ObjectId(),
                 productoDTO.getNombre(),
                 productoDTO.getDescripcion(),
                 productoDTO.getPrecio(),

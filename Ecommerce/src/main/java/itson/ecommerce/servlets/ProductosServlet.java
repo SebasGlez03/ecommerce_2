@@ -5,12 +5,16 @@
 package itson.ecommerce.servlets;
 
 import itson.ecommercedominio.dtos.ProductoDTO;
+import itson.ecommercedominio.dtos.ReseniaDTO;
 import itson.ecommercenegocio.IProductosBO;
+import itson.ecommercenegocio.IReseniaBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercenegocio.implementacion.ProductosBO;
+import itson.ecommercenegocio.implementacion.ReseniasBO;
 import itson.ecommercepersistencia.IConexionBD;
 import itson.ecommercepersistencia.conexionBD.ConexionBD;
 import itson.ecommercepersistencia.implementaciones.ProductosDAO;
+import itson.ecommercepersistencia.implementaciones.ReseniasDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -25,16 +29,18 @@ import org.bson.types.ObjectId;
  *
  * @author Beto_
  */
-@WebServlet(name = "ProductosServlet", urlPatterns = {"/producto"})
+@WebServlet(name = "ProductosServlet", urlPatterns = {"/productos"})
 public class ProductosServlet extends HttpServlet {
     
     private IProductosBO productosBO;
+    private IReseniaBO reseniasBO;
     private IConexionBD conexion;
     
     @Override
     public void init() throws ServletException {
         this.conexion = new ConexionBD(false);
         this.productosBO = new ProductosBO(new ProductosDAO(this.conexion));
+        this.reseniasBO = new ReseniasBO(new ReseniasDAO(conexion));
     }
     
     @Override
@@ -118,32 +124,49 @@ public class ProductosServlet extends HttpServlet {
     private void listarProductos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try{
-            //1. Obtenemos la lista de la capa de Negocio
-            List<ProductoDTO> productos = productosBO.obtenerTodos();
-
-            //2. Guardamos la lista en el request para q el JSP la vea
+            String busqueda = request.getParameter("busqueda");
+            
+            List<ProductoDTO> productos;
+            if (busqueda != null && !busqueda.isEmpty()) {
+                // Buscamos por nombre (aquí se puede agregar lógica para categoría y precio y así)
+                productos = productosBO.buscarProductos(busqueda, null, null, null);
+            } else {
+                productos = productosBO.obtenerTodos();
+            }
+            
             request.setAttribute("listaProductos", productos);
-
-            //3. Enviamos al index.jsp o al catalogo.jsp
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }catch(NegocioException ne){
+            ne.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al cargar productos");
         }
     }
     
     private void verDetalleProducto(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try{
+        try {
             String idString = request.getParameter("id");
+            if (idString == null || idString.isEmpty()) {
+                response.sendRedirect("productos");
+                return;
+            }
+            
             ObjectId idProducto = new ObjectId(idString);
             
-            ProductoDTO dto = productosBO.obtenerProductoPorId(idProducto);
+            //1. Obtenemos el producto
+            ProductoDTO producto = productosBO.obtenerProductoPorId(idProducto);
             
-            // TODO: Aquí va un método de reseñasBO q obtenga todas las reseñas
-            // del producto
+            //2. Obtenemos reseñas (Ahora sí devuelve una lista)
+            List<ReseniaDTO> resenias = reseniasBO.obtenerReseniasPorProducto(idProducto);
             
-        } catch(NegocioException ne){
-            ne.printStackTrace();
+            //3. Enviamos a la vista
+            request.setAttribute("producto", producto);
+            request.setAttribute("listaResenias", resenias);
+            
+            request.getRequestDispatcher("producto.jsp").forward(request, response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
             response.sendRedirect("productos");
         }
     }

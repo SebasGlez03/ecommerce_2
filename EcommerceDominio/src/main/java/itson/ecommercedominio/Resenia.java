@@ -5,16 +5,26 @@ import java.util.Date;
 
 public class Resenia {
     private ObjectId id;
-//    private ObjectId idProducto; 
+    private ObjectId idProducto; 
     private ObjectId idUsuario; 
     private String comentario;
     private int calificacion;
     private Date fecha;
 
-    public Resenia() {}
+    public Resenia() {
+    }
 
-    public Resenia(ObjectId id, ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
+    public Resenia(ObjectId idProducto, ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
+        this.idProducto = idProducto;
+        this.idUsuario = idUsuario;
+        this.comentario = comentario;
+        this.calificacion = calificacion;
+        this.fecha = fecha;
+    }
+
+    public Resenia(ObjectId id, ObjectId idProducto, ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
         this.id = id;
+        this.idProducto = idProducto;
         this.idUsuario = idUsuario;
         this.comentario = comentario;
         this.calificacion = calificacion;
@@ -27,6 +37,14 @@ public class Resenia {
 
     public void setId(ObjectId id) {
         this.id = id;
+    }
+
+    public ObjectId getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(ObjectId idProducto) {
+        this.idProducto = idProducto;
     }
 
     public ObjectId getIdUsuario() {
@@ -60,6 +78,5 @@ public class Resenia {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
 
 }

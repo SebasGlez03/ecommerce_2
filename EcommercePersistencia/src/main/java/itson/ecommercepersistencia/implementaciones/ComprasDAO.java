@@ -35,6 +35,7 @@ public class ComprasDAO implements IComprasDAO{
     public CompraDTO crear(CompraDTO compraDTO) throws PersistenciaException {
         try {
             // 1. Convertir DTO a Entidad
+            compraDTO.setId(new ObjectId());
             Compra compra = convertirAEntidad(compraDTO);
 
             // 2. Insertar en MongoDB
