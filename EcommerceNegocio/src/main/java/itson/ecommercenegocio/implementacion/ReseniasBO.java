@@ -1,18 +1,14 @@
 package itson.ecommercenegocio.implementacion;
 
-import itson.ecommercedominio.Resenia;
-import itson.ecommercedominio.Usuario;
 import itson.ecommercedominio.dtos.ReseniaDTO;
 import itson.ecommercedominio.dtos.UsuarioDTO;
 import itson.ecommercedominio.enumeradores.RolUsuario;
 import itson.ecommercenegocio.IReseniaBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercepersistencia.IReseniasDAO;
-import itson.ecommercepersistencia.implementaciones.ReseniasDAO; // Usa la interfaz preferiblemente
 import itson.ecommercepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class ReseniasBO  implements IReseniaBO{
     private final IReseniasDAO reseniasDAO;
@@ -116,6 +112,7 @@ public class ReseniasBO  implements IReseniaBO{
     }
     
     // Método opcional si lo definiste en la interfaz para validar si ya comentó
+    @Override
     public ReseniaDTO obtenerPrimeraReseniaPorUsuario(ObjectId idUsuario) throws NegocioException {
         if (idUsuario == null) return null;
         try {
