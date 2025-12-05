@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -83,8 +84,10 @@ public class ProductosServlet extends HttpServlet {
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
         
-        if (accion == null || accion.isEmpty()) {
-            //pend
+        if (accion != null && accion.equals("ver")) {
+            verDetalleProducto(request, response);
+        } else {
+            listarProductos(request, response);
         }
     }
 
@@ -124,8 +127,24 @@ public class ProductosServlet extends HttpServlet {
             //3. Enviamos al index.jsp o al catalogo.jsp
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }catch(NegocioException ne){
-            ne.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al cargar productos");
+        }
+    }
+    
+    private void verDetalleProducto(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try{
+            String idString = request.getParameter("id");
+            ObjectId idProducto = new ObjectId(idString);
+            
+            ProductoDTO dto = productosBO.obtenerProductoPorId(idProducto);
+            
+            // TODO: Aquí va un método de reseñasBO q obtenga todas las reseñas
+            // del producto
+            
+        } catch(NegocioException ne){
+            ne.printStackTrace();
+            response.sendRedirect("productos");
         }
     }
 }
