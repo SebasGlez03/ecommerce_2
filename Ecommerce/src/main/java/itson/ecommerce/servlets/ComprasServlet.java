@@ -4,13 +4,15 @@
  */
 package itson.ecommerce.servlets;
 
+import itson.ecommercedominio.dtos.Carrito;
 import itson.ecommercedominio.dtos.CompraDTO;
+import itson.ecommercedominio.dtos.DetalleCompraDTO;
+import itson.ecommercedominio.dtos.ItemCarrito;
 import itson.ecommercedominio.dtos.UsuarioDTO;
+import itson.ecommercedominio.enumeradores.EstadoCompra;
 import itson.ecommercenegocio.IComprasBO;
-import itson.ecommercenegocio.IProductosBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercenegocio.implementacion.ComprasBO;
-import itson.ecommercenegocio.implementacion.ProductosBO;
 import itson.ecommercepersistencia.IConexionBD;
 import itson.ecommercepersistencia.conexionBD.ConexionBD;
 import itson.ecommercepersistencia.implementaciones.ComprasDAO;
@@ -23,6 +25,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -94,16 +97,18 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
 
+        // Requisito 6.1: Historial de pedidos
         if ("historial".equals(accion)) {
             try {
-                // Usamos el BO que ya implementaste
                 List<CompraDTO> historial = comprasBO.obtenerHistorialUsuario(usuario.getId());
                 request.setAttribute("listaCompras", historial);
                 request.getRequestDispatcher("historial.jsp").forward(request, response);
-            } catch (NegocioException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("index.jsp");
             }
+        } else {
+            response.sendRedirect("index.jsp");
         }
     }
 
@@ -119,6 +124,11 @@ public class ComprasServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        String accion = request.getParameter("accion");
+        
+        if ("pagar".equals(accion)) {
+            procesarPago(request, response);
+        }
     }
 
     /**
@@ -131,4 +141,57 @@ public class ComprasServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void procesarPago(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("usuarioLogueado");
+        Carrito carrito = (Carrito) session.getAttribute("carrito");
+
+        // 1. Validaciones
+        if (usuario == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        if (carrito == null || carrito.getCantidadItems() == 0) {
+            response.sendRedirect("carrito.jsp?error=vacio");
+            return;
+        }
+
+        try {
+            // 2. Convertir items del Carrito a DetalleCompraDTO
+            List<DetalleCompraDTO> detalles = new ArrayList<>();
+            for (ItemCarrito item : carrito.getListaItems()) {
+                detalles.add(new DetalleCompraDTO(
+                    item.getProductoId(),
+                    item.getNombre(),
+                    item.getCantidad(),
+                    item.getPrecioUnitario()
+                ));
+            }
+
+            // 3. Armar el objeto CompraDTO
+            CompraDTO compra = new CompraDTO();
+            compra.setUsuarioId(usuario.getId());
+            compra.setTotal(carrito.getTotal());
+            compra.setDetalles(detalles);
+            compra.setDireccionEnvio(usuario.getDireccion()); // Usamos la dirección del perfil
+            compra.setMetodoPago("Tarjeta Simulada");
+            compra.setEstado(EstadoCompra.PENDIENTE);
+
+            // 4. Llamar al BO (Esto guarda la compra y descuenta el stock)
+            CompraDTO compraRealizada = comprasBO.realizarCompra(compra);
+
+            // 5. Éxito: Limpiar carrito y mandar a confirmación
+            session.removeAttribute("carrito");
+            
+            // Pasamos el objeto compra al JSP de confirmación
+            request.setAttribute("compra", compraRealizada);
+            request.getRequestDispatcher("confirmacion.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Si falla (ej. stock insuficiente), volvemos al carrito con el error
+            response.sendRedirect("carrito.jsp?error=" + e.getMessage());
+        }
+    }
 }
