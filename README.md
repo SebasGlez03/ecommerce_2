@@ -1,11 +1,11 @@
 # E-commerce de perifericos de computadora #
 ### Proyecto de Aplicaciones Web ITSON Agosto - Diciembre 2025 ###
 Equipo conformado por:<br>
-- Jesus Palma<br>
-- Victor Gonzalez<br>
-- Santiago Sanchez<br>
-- Cuauhtémoc Vázquez<br>
-- Eduardo Samoano<br>
+- Jesus Palma - 247910<br>
+- Victor Gonzalez - 235616<br>
+- Santiago Sanchez - 249522<br>
+- Cuauhtémoc Vázquez - 247284<br>
+- Eduardo Samoano - 230949<br>
 
 <a href="#diagrama_dominio"><kbd>Diagrama Dominio</kbd></a><br>
 <a href="#diagrama_mer"><kbd>Diagrama MER</kbd></a><br><br>
