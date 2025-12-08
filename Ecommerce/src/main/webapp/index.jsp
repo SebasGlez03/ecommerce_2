@@ -24,7 +24,11 @@
             </div>
 
             <nav class="nav_items">
-                <a href="#">Categorías</a>
+                <div class="categorias">
+                    <h3 id="titulo_categorias">Categorías</h3>
+                    <a class="categorias_disponibles" href="productos?categoria=AUDIFONOS">Audífonos</a>
+                    <a class="categorias_disponibles" href="productos?categoria=MONITORES">Monitores</a>
+                </div>
                 <a href="#">Ofertas</a>
                 
                 <c:if test="${sessionScope.usuarioLogueado.rolUsuario == 'ADMIN'}">

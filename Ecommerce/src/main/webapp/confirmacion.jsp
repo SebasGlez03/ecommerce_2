@@ -61,33 +61,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Producto 1 -->
-                    <tr>
-                        <td class="prod_img_cell">
-                            <img src="https://ddtech.mx/assets/uploads/f85223743453736762382415170425c8.jpg" alt="Laptop">
-                        </td>
-                        <td>
-                            <div class="prod_desc">
-                                Laptop MSI VECTOR 16 HX AI A2XWIG-400US / Intel Ultra 9-275HX
-                            </div>
-                        </td>
-                        <td class="prod_qty">2</td>
-                        <td class="prod_price">$3,500</td>
-                    </tr>
-                    <!-- Producto 2 -->
-                    <tr>
-                        <td class="prod_img_cell">
-                            <img src="https://ddtech.mx/assets/uploads/acc840b30a614cd42451bec9190e47ab.png" alt="Silla">
-                        </td>
-                        <td>
-                            <div class="prod_desc">
-                                Silla Gamer Munfrost Nova / Color Gris con Blanco / Reclinable / Con Soporte Lumbar / Hasta 180kg
-                            </div>
-                        </td>
-                        <td class="prod_qty">1</td>
-                        <td class="prod_price">$1,900</td>
-                    </tr>
+                    <c:forEach var="detalle" items="${compra.detalles}">
+                        <tr>
+                            <td class="prod_img_cell">
+                                <i data-lucide="package" style="color: #ccc;"></i>
+                            </td>
+                            <td>
+                                <div class="prod_desc">
+                                    ${detalle.nombreProducto}
+                                </div>
+                            </td>
+                            <td class="prod_qty">${detalle.cantidad}</td>
+                            <td class="prod_price">$${detalle.precioUnitario}</td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
+
+                <div class="info_box" style="font-size: 18px;">
+                    Total: $${compra.total}
+                </div>
+
+                <div class="info_box">
+                    Dirección: ${compra.direccionEnvio}
+                </div>
             </table>
             
             <hr class="section_divider" style="margin-top: -31px; position: relative; z-index: 1; border-top: 1px solid white;">

@@ -48,25 +48,27 @@
             <p>Bienvenido al área de gestión administrativa.</p>
 
             <div class="admin-grid">
-                
-                <div class="card-admin" onclick="alert('Ir a gestión de usuarios')">
+                <div class="card-admin" onclick="alert('Funcionalidad de gestión de usuarios pendiente (Req 1.3)')">
                     <i data-lucide="users" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
                     <h3>Usuarios</h3>
                     <p>Gestionar clientes y administradores</p>
                 </div>
 
-                <div class="card-admin" onclick="alert('Ir a gestión de productos')">
-                    <i data-lucide="package" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
-                    <h3>Productos</h3>
-                    <p>Agregar o editar inventario</p>
-                </div>
+                <a href="../productos?accion=listarAdmin" style="text-decoration:none;">
+                    <div class="card-admin" onclick="window.location.href='../productos?accion=listarAdmin'" style="cursor: pointer;">
+                        <i data-lucide="package" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
+                        <h3>Productos</h3>
+                        <p>Administrar Inventario</p> 
+                    </div>
+                </a>
 
-                <div class="card-admin" onclick="alert('Ir a reportes')">
-                    <i data-lucide="bar-chart-3" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
-                    <h3>Reportes</h3>
-                    <p>Ver ventas y estadísticas</p>
-                </div>
-                
+                <a href="../compras?accion=adminListar" style="text-decoration:none;">
+                    <div class="card-admin">
+                        <i data-lucide="bar-chart-3" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
+                        <h3>Pedidos</h3>
+                        <p>Ver ventas y cambiar estados</p>
+                    </div>
+                </a>
             </div>
         </div>
 

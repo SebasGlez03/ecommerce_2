@@ -15,11 +15,43 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 40px;
-    height: 70px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin-bottom: 20px;
+    padding: 15px 40px; /* Un poco más de aire */
+    height: 80px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más elegante */
+    position: sticky; /* Que se quede fijo al bajar */
+    top: 0;
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    margin-bottom: 30px;
+}
+
+.search_container {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo semitransparente */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px; /* Pill shape */
+    padding: 8px 20px;
+    width: 400px; /* Más ancho */
+    transition: all 0.3s ease;
+}
+
+.search_container:focus-within {
+    background-color: var(--color-bg-main);
+    border-color: var(--color-bg-6th);
+    box-shadow: 0 0 0 2px rgba(58, 157, 255, 0.3);
+}
+
+.search_container input {
+    background: transparent;
+    border: none;
+    color: white; /* Texto blanco */
+    width: 100%;
+    outline: none;
+    font-size: 16px;
+}
+
+.search_container input::placeholder {
+    color: #ccc;
 }
 
 .nav_items {
@@ -86,37 +118,28 @@ header {
 .contenedor {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: stretch;
-    align-content: stretch;
+    align-items: flex-start; /* Alineación superior importante */
+    gap: 30px; /* Espacio entre sidebar y contenido */
+    padding: 0 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
 }
 
 /* Area de Categorias */
 .categorias {
     background-color: var(--color-bg-secondary);
-    color: var(--color-txt-main);
-    display: block;
-    flex-grow: 0.1;
-    flex-shrink: 1;
-    flex-basis: auto;
-    align-self: auto;
-    order: 0;
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-variation-settings:
-        "wdth" 100;
-    padding-top: 0;
-    padding-bottom: 20px;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 200px;
-    min-width: 200px;
-    margin: 0 20px 0 10px;
+    border: 1px solid rgba(255,255,255,0.05);
+    min-width: 250px; /* Ancho fijo para que no se aplaste */
+    width: 250px;
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* Importante: evitar que se vaya detrás */
+    z-index: 10; 
 }
 
 .categorias a {
@@ -130,36 +153,52 @@ header {
     text-decoration: none;
 }
 
+.categorias h3 {
+    margin-top: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-bg-6th);
+}
+
 .categorias_disponibles {
-    text-align: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    text-align: left; /* Mejor lectura */
+    color: var(--color-txt-secondary);
+    display: block; /* Asegura que ocupe el ancho */
+}
+
+.categorias_disponibles:hover {
+    background-color: var(--color-bg-5th);
+    color: white;
+    transform: translateX(5px); /* Pequeña animación */
 }
 
 /* Areas de informacion principal */
 .info {
-    background-color: var(--color-bg-tertiary);
-    color: var(--color-txt-main);
-    display: block;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-    align-self: auto;
-    order: 0;
-    margin-right: 10px;
+    flex: 1; /* Toma el resto del espacio disponible */
+    width: 100%; /* Asegura que llene su flex-item */
+    overflow: hidden; /* Evita desbordamientos */
 }
 
 .ofertas {
-    width: 95%;
-    max-width: 1100px;
-    margin: 20px auto;
-    text-align: center;
-    border-radius: 8px;
+    width: 100%;
+    height: 300px; /* Altura fija para el banner */
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    position: relative;
 }
 
 .img_oferta {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover; /* Recorta la imagen para llenar el espacio sin deformar */
     display: block;
 }
 

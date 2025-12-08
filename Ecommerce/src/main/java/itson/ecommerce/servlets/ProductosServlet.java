@@ -90,32 +90,37 @@ public class ProductosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        
+
+        // Lógica pública
         if (accion != null && accion.equals("ver")) {
             verDetalleProducto(request, response);
-        } else {
-            listarProductos(request, response);
-        }
-        
-        // EN EL DOGET TAMBIÉN NECESITAS AGREGAR LA VISTA DE ADMIN
-        // Dentro de doGet...
-        /*
-        if ("listarAdmin".equals(accion)) {
-             List<ProductoDTO> lista = productosBO.obtenerTodos();
-             request.setAttribute("listaProductos", lista);
-             request.getRequestDispatcher("admin/productos.jsp").forward(request, response);
-             return;
+        } 
+        // Lógica de ADMIN
+        else if ("listarAdmin".equals(accion)) {
+             // Validar sesión de admin aquí si ocupamos seguridad extra
+             try {
+                List<ProductoDTO> lista = productosBO.obtenerTodos();
+                request.setAttribute("listaProductos", lista);
+                // Redirige al JSP de tabla de administración, NO al index
+                request.getRequestDispatcher("admin/productos.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("admin/dashboard.jsp?error=ErrorListar");
+            }
         } else if ("formulario".equals(accion)) {
-             // Para editar, cargamos el producto
              String id = request.getParameter("id");
              if(id != null && !id.isEmpty()){
-                 ProductoDTO p = productosBO.obtenerProductoPorId(new ObjectId(id));
-                 request.setAttribute("producto", p);
+                 try {
+                    ProductoDTO p = productosBO.obtenerProductoPorId(new ObjectId(id));
+                    request.setAttribute("producto", p);
+                 } catch (Exception e) { e.printStackTrace(); }
              }
              request.getRequestDispatcher("admin/productos_form.jsp").forward(request, response);
-             return;
+        } 
+        // Default (Catálogo público)
+        else {
+            listarProductos(request, response);
         }
-        */
     }
 
     /**
@@ -240,11 +245,17 @@ public class ProductosServlet extends HttpServlet {
             throws ServletException, IOException {
         try{
             String busqueda = request.getParameter("busqueda");
+            String categoriaParam = request.getParameter("categoria");
+            Categoria catEnum = null;
+            
+            if(categoriaParam != null && !categoriaParam.isEmpty()){
+                catEnum = Categoria.valueOf(categoriaParam);
+            }
             
             List<ProductoDTO> productos;
             if (busqueda != null && !busqueda.isEmpty()) {
                 // Buscamos por nombre (aquí se puede agregar lógica para categoría y precio y así)
-                productos = productosBO.buscarProductos(busqueda, null, null, null);
+                productos = productosBO.buscarProductos(busqueda, catEnum, null, null);
             } else {
                 productos = productosBO.obtenerTodos();
             }
