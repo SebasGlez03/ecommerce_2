@@ -4,17 +4,18 @@
     Author     : Beto_
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://jakarta.ee/tags/c" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Producto</title>
-    <link rel="stylesheet" href="../estilos/styles_login.css"> </head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/estilos/styles_login.css">
+</head>
 <body>
     <div class="contenedor_login">
         <c:set var="esEdicion" value="${not empty producto}" />
         
-        <form class="login_form" action="../productos" method="POST">
+        <form class="login_form" action="productos" method="POST">
             <h2>${esEdicion ? 'Editar Producto' : 'Nuevo Producto'}</h2>
             
             <input type="hidden" name="accion" value="${esEdicion ? 'editar' : 'crear'}">
@@ -61,7 +62,8 @@
             </div>
 
             <button type="submit" class="submit_btn">Guardar</button>
-            <a href="../productos?accion=listarAdmin" style="display:block; text-align:center; margin-top:10px;">Cancelar</a>
+            
+            <a href="?accion=listarAdmin" style="display:block; text-align:center; margin-top:10px;">Cancelar</a>
         </form>
     </div>
 </body>
