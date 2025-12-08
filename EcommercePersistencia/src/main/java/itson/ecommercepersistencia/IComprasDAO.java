@@ -5,6 +5,7 @@
 package itson.ecommercepersistencia;
 
 import itson.ecommercedominio.dtos.CompraDTO;
+import itson.ecommercedominio.enumeradores.EstadoCompra;
 import itson.ecommercepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -16,4 +17,6 @@ import org.bson.types.ObjectId;
 public interface IComprasDAO {
     CompraDTO crear(CompraDTO compra) throws PersistenciaException;
     List<CompraDTO> obtenerPorUsuario(ObjectId usuarioId) throws PersistenciaException;
+    List<CompraDTO> obtenerTodas() throws PersistenciaException;
+    void actualizarEstado(ObjectId idCompra, EstadoCompra estado) throws PersistenciaException;
 }

@@ -74,8 +74,6 @@ public class CarritoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-        //Redirige a la vista del carrito
         request.getRequestDispatcher("carrito.jsp").forward(request, response);
     }
 
@@ -91,12 +89,34 @@ public class CarritoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
+        HttpSession session = request.getSession();
+        Carrito carrito = (Carrito) session.getAttribute("carrito");
         
-        //Si la acción es agregar, agregamos el producto al carrito
+        // Inicializar carrito si no existe para evitar errores
+        if(carrito == null){
+            carrito = new Carrito(new HashMap<>());
+            session.setAttribute("carrito", carrito);
+        }
+        
         if ("agregar".equals(accion)) {
-            agregarProducto(request, response);
+            agregarProducto(request, response, session, carrito);
         } else if ("eliminar".equals(accion)) {
-            // TODO: Implementar lógica de eliminación (Req 3.1)
+            String idProducto = request.getParameter("idProducto");
+            carrito.eliminarItem(idProducto);
+            session.setAttribute("carrito", carrito);
+            response.sendRedirect("carrito.jsp");
+        } else if ("actualizar".equals(accion)) {
+            try {
+                String idProducto = request.getParameter("idProducto");
+                int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+                carrito.actualizarCantidad(idProducto, cantidad);
+                session.setAttribute("carrito", carrito);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            response.sendRedirect("carrito.jsp");
+        } else {
+            response.sendRedirect("carrito.jsp");
         }
     }
 
@@ -110,25 +130,17 @@ public class CarritoServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
     
-    private void agregarProducto(HttpServletRequest request, HttpServletResponse response)
+    private void agregarProducto(HttpServletRequest request, HttpServletResponse response, HttpSession session, Carrito carrito)
             throws ServletException, IOException{
-        HttpSession session = request.getSession();
-        
-        Carrito carrito = (Carrito) session.getAttribute("carrito");
-        if(carrito == null){
-            carrito = new Carrito(new HashMap<>());
-            session.setAttribute("carrito", carrito);
-        }
-        
         try{
             String idProd = request.getParameter("idProducto");
-            int cantidad = Integer.parseInt(idProd);
+            String cantidadStr = request.getParameter("cantidad");
+            int cantidad = (cantidadStr != null && !cantidadStr.isEmpty()) ? Integer.parseInt(cantidadStr) : 1;
             
-            //Obtenemos los datos de la BD
             ProductoDTO prod = productosBO.obtenerProductoPorId(new ObjectId(idProd));
             
-            //Si el producto si existe (q debería) creamos un item con él
             if(prod != null){
+                // Validar stock aquí si se desea
                 ItemCarrito item = new ItemCarrito(
                     prod.getId(),
                     prod.getNombre(),
@@ -136,15 +148,11 @@ public class CarritoServlet extends HttpServlet {
                     prod.getPrecio(),
                     cantidad
                 );
-                
-                //Agregamos el producto y actualizamos la sesión
                 carrito.agregarItem(item);
                 session.setAttribute("carrito", carrito);
             }
-            
-            //Redirigimos al carrito
-            response.sendRedirect("carrito");
-        }catch(NegocioException ne){
+            response.sendRedirect("carrito"); // Redirige al GET para ver el carrito
+        }catch(NegocioException | NumberFormatException ne){
             ne.printStackTrace();
             response.sendRedirect("index.jsp");
         }

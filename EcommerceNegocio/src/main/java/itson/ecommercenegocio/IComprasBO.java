@@ -5,6 +5,7 @@
 package itson.ecommercenegocio;
 
 import itson.ecommercedominio.dtos.CompraDTO;
+import itson.ecommercedominio.enumeradores.EstadoCompra;
 import itson.ecommercenegocio.excepciones.NegocioException;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -14,6 +15,8 @@ import org.bson.types.ObjectId;
  * @author Beto_
  */
 public interface IComprasBO {
-    public CompraDTO realizarCompra(CompraDTO compra) throws NegocioException;
-    public List<CompraDTO> obtenerHistorialUsuario(ObjectId usuarioId) throws NegocioException;
+    CompraDTO realizarCompra(CompraDTO compra) throws NegocioException;
+    void actualizarEstado(ObjectId idCompra, EstadoCompra estado) throws NegocioException;
+    List<CompraDTO> obtenerTodasLasCompras() throws NegocioException;
+    List<CompraDTO> obtenerHistorialUsuario(ObjectId usuarioId) throws NegocioException;
 }

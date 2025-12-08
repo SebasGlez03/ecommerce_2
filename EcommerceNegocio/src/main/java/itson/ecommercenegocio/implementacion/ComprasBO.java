@@ -82,6 +82,26 @@ public class ComprasBO implements IComprasBO{
             throw new NegocioException("Error al procesar la compra: " + e.getMessage(), e);
         }
     }
+    
+    @Override
+    public List<CompraDTO> obtenerTodasLasCompras() throws NegocioException {
+        try {
+            // Requiere que agregues el método en IComprasDAO y ComprasDAO
+            return comprasDAO.obtenerTodas(); 
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al consultar todas las compras", e);
+        }
+    }
+
+    @Override
+    public void actualizarEstado(ObjectId idCompra, EstadoCompra estado) throws NegocioException {
+        if(idCompra == null || estado == null) throw new NegocioException("Datos inválidos");
+        try {
+            comprasDAO.actualizarEstado(idCompra, estado);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al actualizar estado", e);
+        }
+    }
 
     @Override
     public List<CompraDTO> obtenerHistorialUsuario(ObjectId usuarioId) throws NegocioException {

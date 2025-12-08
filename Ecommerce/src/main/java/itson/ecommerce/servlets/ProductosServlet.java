@@ -6,6 +6,7 @@ package itson.ecommerce.servlets;
 
 import itson.ecommercedominio.dtos.ProductoDTO;
 import itson.ecommercedominio.dtos.ReseniaDTO;
+import itson.ecommercedominio.enumeradores.Categoria;
 import itson.ecommercenegocio.IProductosBO;
 import itson.ecommercenegocio.IReseniaBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
@@ -95,6 +96,26 @@ public class ProductosServlet extends HttpServlet {
         } else {
             listarProductos(request, response);
         }
+        
+        // EN EL DOGET TAMBIÉN NECESITAS AGREGAR LA VISTA DE ADMIN
+        // Dentro de doGet...
+        /*
+        if ("listarAdmin".equals(accion)) {
+             List<ProductoDTO> lista = productosBO.obtenerTodos();
+             request.setAttribute("listaProductos", lista);
+             request.getRequestDispatcher("admin/productos.jsp").forward(request, response);
+             return;
+        } else if ("formulario".equals(accion)) {
+             // Para editar, cargamos el producto
+             String id = request.getParameter("id");
+             if(id != null && !id.isEmpty()){
+                 ProductoDTO p = productosBO.obtenerProductoPorId(new ObjectId(id));
+                 request.setAttribute("producto", p);
+             }
+             request.getRequestDispatcher("admin/productos_form.jsp").forward(request, response);
+             return;
+        }
+        */
     }
 
     /**
@@ -108,7 +129,27 @@ public class ProductosServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8"); // Importante para caracteres especiales
+        String accion = request.getParameter("accion");
+
+        if (accion == null) {
+            response.sendRedirect("productos");
+            return;
+        }
+
+        switch (accion) {
+            case "crear":
+                guardarProducto(request, response);
+                break;
+            case "editar":
+                editarProducto(request, response);
+                break;
+            case "eliminar":
+                eliminarProducto(request, response);
+                break;
+            default:
+                response.sendRedirect("productos");
+        }
     }
 
     /**
@@ -120,6 +161,80 @@ public class ProductosServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private void guardarProducto(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            // Recoger parámetros
+            String nombre = request.getParameter("nombre");
+            String descripcion = request.getParameter("descripcion");
+            Double precio = Double.valueOf(request.getParameter("precio"));
+            Integer stock = Integer.valueOf(request.getParameter("stock"));
+            String imagenUrl = request.getParameter("imagenUrl");
+            String categoriaStr = request.getParameter("categoria");
+            
+            // Asumiendo que tienes el Enum Categoria importado
+            Categoria categoria = Categoria.valueOf(categoriaStr);
+
+            ProductoDTO nuevo = new ProductoDTO(nombre, descripcion, precio, stock, categoria, imagenUrl);
+            productosBO.agregarProducto(nuevo);
+            
+            // Redirigir al listado de admin (necesitas crear el JSP admin/productos.jsp)
+            response.sendRedirect("productos?accion=listarAdmin"); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("admin/dashboard.jsp?error=" + e.getMessage());
+        }
+    }
+    
+    private void editarProducto(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String idStr = request.getParameter("idProducto");
+            String nombre = request.getParameter("nombre");
+            String descripcion = request.getParameter("descripcion");
+            Double precio = Double.valueOf(request.getParameter("precio"));
+            Integer stock = Integer.valueOf(request.getParameter("stock"));
+            String imagenUrl = request.getParameter("imagenUrl");
+            Categoria categoria = Categoria.valueOf(request.getParameter("categoria"));
+
+            ProductoDTO producto = new ProductoDTO(new ObjectId(idStr), nombre, descripcion, precio, stock, categoria, imagenUrl);
+            productosBO.actualizarProducto(producto);
+            
+            response.sendRedirect("productos?accion=listarAdmin");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("admin/dashboard.jsp?error=" + e.getMessage());
+        }
+    }
+    
+    private void eliminarProducto(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String idStr = request.getParameter("idProducto");
+            productosBO.eliminarProducto(new ObjectId(idStr));
+            response.sendRedirect("productos?accion=listarAdmin");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("productos?accion=listarAdmin&error=ErrorEliminar");
+        }
+    }
+
+    private void actualizarProducto(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {    
+            //1. Extraemos los valores de la request
+            String idStr = request.getParameter("id");
+            
+            //2. Obtenemos el producto por id
+            ProductoDTO buscado = productosBO.obtenerProductoPorId(new ObjectId(idStr));
+            
+            //3. Actualizamos el producto con el buscado
+            productosBO.actualizarProducto(buscado);
+
+            //4. Redirigimos a la lista de admin (asumiendo que ya está esa vista)
+            //iíresponse.sendRedirect("admin/productos.jsp?exito=creado");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("admin/productos_form.jsp?error=" + e.getMessage());
+        }
+    }
     
     private void listarProductos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

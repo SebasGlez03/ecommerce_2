@@ -10,6 +10,7 @@ import itson.ecommercedominio.dtos.DetalleCompraDTO;
 import itson.ecommercedominio.dtos.ItemCarrito;
 import itson.ecommercedominio.dtos.UsuarioDTO;
 import itson.ecommercedominio.enumeradores.EstadoCompra;
+import itson.ecommercedominio.enumeradores.RolUsuario;
 import itson.ecommercenegocio.IComprasBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercenegocio.implementacion.ComprasBO;
@@ -27,6 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -97,7 +99,6 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
 
-        // Requisito 6.1: Historial de pedidos
         if ("historial".equals(accion)) {
             try {
                 List<CompraDTO> historial = comprasBO.obtenerHistorialUsuario(usuario.getId());
@@ -106,6 +107,22 @@ public class ComprasServlet extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("index.jsp");
+            }
+        } 
+        // NUEVA LÓGICA ADMIN
+        else if ("adminListar".equals(accion)) {
+            if (usuario.getRolUsuario() != RolUsuario.ADMIN) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
+            try {
+                // Asegúrate de haber agregado este método al BO como se indicó arriba
+                List<CompraDTO> todas = comprasBO.obtenerTodasLasCompras();
+                request.setAttribute("listaComprasAdmin", todas);
+                request.getRequestDispatcher("admin/pedidos.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("admin/dashboard.jsp?error=ErrorAlListar");
             }
         } else {
             response.sendRedirect("index.jsp");
@@ -128,6 +145,21 @@ public class ComprasServlet extends HttpServlet {
         
         if ("pagar".equals(accion)) {
             procesarPago(request, response);
+        } 
+        // NUEVA LÓGICA ADMIN
+        else if ("actualizarEstado".equals(accion)) {
+            try {
+                String idCompra = request.getParameter("idCompra");
+                String estadoStr = request.getParameter("nuevoEstado");
+                EstadoCompra estado = EstadoCompra.valueOf(estadoStr);
+                
+                comprasBO.actualizarEstado(new ObjectId(idCompra), estado);
+                
+                response.sendRedirect("compras?accion=adminListar");
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("compras?accion=adminListar&error=NoSePudoActualizar");
+            }
         }
     }
 

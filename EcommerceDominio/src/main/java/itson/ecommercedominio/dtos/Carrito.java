@@ -5,6 +5,7 @@
 package itson.ecommercedominio.dtos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bson.types.ObjectId;
@@ -15,6 +16,10 @@ import org.bson.types.ObjectId;
  */
 public class Carrito {
     private Map<ObjectId, ItemCarrito> items;
+    
+    public Carrito(){
+        this.items = new HashMap<>();
+    }
 
     public Carrito(Map<ObjectId, ItemCarrito> items) {
         this.items = items;
@@ -28,6 +33,20 @@ public class Carrito {
         } else {
             // Si no existe, lo agregamos al mapa
             items.put(itemNuevo.getProductoId(), itemNuevo);
+        }
+    }
+    
+    public void actualizarCantidad(String idProductoHex, int nuevaCantidad) {
+        if (idProductoHex == null) return;
+        ObjectId id = new ObjectId(idProductoHex);
+        
+        if (items.containsKey(id)) {
+            if (nuevaCantidad <= 0) {
+                items.remove(id);
+            } else {
+                ItemCarrito item = items.get(id);
+                item.setCantidad(nuevaCantidad);
+            }
         }
     }
 
