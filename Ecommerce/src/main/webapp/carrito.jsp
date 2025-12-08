@@ -84,10 +84,7 @@
                 </table>
 
                 <div class="next_step_container">
-                    <form action="compras" method="POST">
-                        <input type="hidden" name="accion" value="pagar">
-                        <button class="btn_next_step">Confirmar Compra</button>
-                    </form>
+                    <a href="pago.jsp" class="btn_next_step" style="text-decoration:none;">Proceder al Pago</a>
                 </div>
 
             </c:when>

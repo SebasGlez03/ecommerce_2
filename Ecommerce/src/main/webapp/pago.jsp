@@ -81,7 +81,10 @@
                 </div>
 
                 <div class="pay_btn_container">
-                    <button class="btn_pay">Pagar</button>
+                    <form action="compras" method="POST">
+                        <input type="hidden" name="accion" value="pagar">
+                        <button type="submit" class="btn_pay">Pagar $${sessionScope.carrito.total}</button>
+                    </form>
                 </div>
             </div>
 

@@ -22,6 +22,28 @@
 </head>
 <body style="background-color: #0a2034;">
     
+    <%-- SOLUCIÓN PROBLEMA 3: HEADER AGREGADO --%>
+    <header>
+        <div class="logo">
+            <a href="${pageContext.request.contextPath}/index.jsp">
+                <img src="https://soendergaard.com/wp-content/uploads/2024/06/logoipsum-logo-29-1.png" alt="Logo">
+            </a>
+        </div>
+
+        <nav class="nav_items">
+            <a href="${pageContext.request.contextPath}/index.jsp">Ir a Tienda</a>
+            <span style="color: var(--color-txt-secondary);">|</span>
+            <a href="${pageContext.request.contextPath}/admin/dashboard.jsp" style="color: var(--color-bg-5th); font-weight: bold;">Dashboard</a>
+        </nav>
+
+        <div class="user_section">
+            <span style="margin-right: 15px; font-size: 14px;">Hola, <b>${sessionScope.usuarioLogueado.nombre}</b></span>
+            <a class="login_btn" href="${pageContext.request.contextPath}/usuarios?accion=logout" style="color: #ff6b6b; font-weight: bold; font-size: 14px;">(Salir)</a>
+            <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png" alt="Avatar">
+        </div>
+    </header>
+    <%-- FIN HEADER --%>
+
     <div class="admin-container">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>

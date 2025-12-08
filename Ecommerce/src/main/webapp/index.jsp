@@ -6,6 +6,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:if test="${empty listaProductos and param.accion == null}">
+    <c:redirect url="productos"/>
+</c:if>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
