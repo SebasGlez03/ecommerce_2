@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import itson.ecommercedominio.Resenia;
 import itson.ecommercedominio.dtos.ReseniaDTO;
 import itson.ecommercedominio.dtos.UsuarioDTO;
+import itson.ecommercedominio.enumeradores.RolUsuario;
 import itson.ecommercenegocio.IReseniaBO;
 import itson.ecommercenegocio.implementacion.ReseniasBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
@@ -86,14 +87,23 @@ public class ReseniasServlet extends HttpServlet {
         // 1. Verificar sesión
         HttpSession session = request.getSession(false);
         UsuarioDTO usuario = (session != null) ? (UsuarioDTO) session.getAttribute("usuarioLogueado") : null;
-
+        
+        //2. Verificar que el usuario no es nulo
         if (usuario == null) {
             // Guardar la URL actual para volver después del login (opcional)
             response.sendRedirect("login.jsp");
             return;
         }
+        
+        //3. Verificar que nomaas los no admin puedan crear reseñas
+        if(usuario.getRolUsuario() == RolUsuario.ADMIN){
+            //Si lo es regresamos un errror o una advertencia
+            String referer = request.getHeader("Referer");
+            response.sendRedirect((referer != null ? referer : "index.jsp") + "&error=" + "Los administradores no pueden dejar reseñas. ");
+            return;
+        }
 
-        // 2. Obtener parámetros del formulario
+        // 4. Obtener parámetros del formulario
         String comentario = request.getParameter("comentario");
         String calificacionStr = request.getParameter("calificacion");
         String idProductoStr = request.getParameter("idProducto"); // ¡Importante!
@@ -103,22 +113,19 @@ public class ReseniasServlet extends HttpServlet {
             int calificacion = Integer.parseInt(calificacionStr);
             ObjectId idProducto = new ObjectId(idProductoStr);
 
-            // 3. Crear DTO (No Entidad)
+            // 5. Llenar TODOS los atributos
             ReseniaDTO nuevaReseniaDTO = new ReseniaDTO();
-            // El ID se puede generar aquí o dejar que el DAO lo haga si lo configuras así
-            // Por consistencia con tu DAO actual, generamos uno nuevo:
-            nuevaReseniaDTO.setId(new ObjectId());
-            
+            nuevaReseniaDTO.setId(new ObjectId()); // Generar ID nuevo
             nuevaReseniaDTO.setIdUsuario(usuario.getId());
             nuevaReseniaDTO.setIdProducto(idProducto);
             nuevaReseniaDTO.setComentario(comentario);
             nuevaReseniaDTO.setCalificacion(calificacion);
-            nuevaReseniaDTO.setFecha(new Date()); // Fecha actual
-
-            // 4. Llamar al BO
+            nuevaReseniaDTO.setFecha(new Date());
+            
+            // 6. Llamar al BO para cerear la reseña
             reseniasBO.crearResenia(nuevaReseniaDTO);
 
-            // 5. Redirigir al producto
+            // 7. Redirigir al producto
             // Usamos 'referer' para volver exactamente a la página donde estábamos
             String referer = request.getHeader("Referer");
             response.sendRedirect(referer != null ? referer : "productos?accion=ver&id=" + idProductoStr);

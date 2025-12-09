@@ -71,6 +71,11 @@
             </div>
             
             <div class="form_group">
+                <label>Especificaciones Técnicas</label>
+                <textarea name="especificaciones" rows="4" style="width:100%; padding:10px; border-radius:5px;">${producto.especificaciones}</textarea>
+            </div>
+            
+            <div class="form_group">
                 <label>Categoría</label>
                 <select name="categoria" style="width:100%; padding:10px;">
                     <option value="AUDIFONOS" ${producto.categoria == 'AUDIFONOS' ? 'selected' : ''}>Audífonos</option>

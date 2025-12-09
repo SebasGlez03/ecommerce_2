@@ -173,10 +173,25 @@ public class ProductosServlet extends HttpServlet {
                 response.sendRedirect("productos");
                 return;
             }
+            
+            //Obtenemos el producto y las reseñas
             ObjectId idProducto = new ObjectId(idString);
             ProductoDTO producto = productosBO.obtenerProductoPorId(idProducto);
             List<ReseniaDTO> resenias = reseniasBO.obtenerReseniasPorProducto(idProducto);
-
+            
+            //Calculamos el promedio de reseñas
+            double promedio = 0.0;
+            if(resenias != null && !resenias.isEmpty()){
+                double suma = 0;
+                for (ReseniaDTO r : resenias) {
+                    suma += r.getCalificacion();
+                }
+                promedio = suma/resenias.size();
+            }
+            
+            //Lo guardamos en el DTO
+            producto.setPromedioCalificacion(promedio);
+            
             request.setAttribute("producto", producto);
             request.setAttribute("listaResenias", resenias);
             request.getRequestDispatcher("/producto.jsp").forward(request, response);
@@ -218,7 +233,8 @@ public class ProductosServlet extends HttpServlet {
         Integer stock = Integer.parseInt(request.getParameter("stock"));
         String imagenUrl = request.getParameter("imagenUrl");
         Categoria categoria = Categoria.valueOf(request.getParameter("categoria"));
+        String especificaciones = request.getParameter("especificaciones");
         
-        return new ProductoDTO(nombre, descripcion, precio, stock, categoria, imagenUrl);
+        return new ProductoDTO(nombre, descripcion, precio, stock, categoria, imagenUrl, especificaciones);
     }
 }

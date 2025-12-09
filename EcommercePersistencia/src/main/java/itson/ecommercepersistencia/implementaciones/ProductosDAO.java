@@ -44,7 +44,8 @@ public class ProductosDAO implements IProductosDAO{
                 productoDTO.getPrecio(),
                 productoDTO.getStock(),
                 productoDTO.getCategoria(),
-                productoDTO.getImagenUrl()
+                productoDTO.getImagenUrl(),
+                productoDTO.getEspecificaciones()
             );
             
             // 2. Insertar en MongoDB
@@ -136,7 +137,8 @@ public class ProductosDAO implements IProductosDAO{
                 Updates.set("precio", p.getPrecio()),
                 Updates.set("stock", p.getStock()),
                 Updates.set("categoria", catStr),
-                Updates.set("imagenUrl", p.getImagenUrl())
+                Updates.set("imagenUrl", p.getImagenUrl()),
+                Updates.set("especificaciones", p.getEspecificaciones())
             );
 
             // updateOne devuelve un resultado que nos dice si encontró y modificó algo
@@ -178,6 +180,7 @@ public class ProductosDAO implements IProductosDAO{
         dto.setStock(p.getStock());
         dto.setCategoria(p.getCategoria());
         dto.setImagenUrl(p.getImagenUrl());
+        dto.setEspecificaciones(p.getEspecificaciones());
         return dto;
     }
     

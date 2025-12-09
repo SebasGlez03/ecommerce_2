@@ -75,7 +75,7 @@ public class ProductosBOTest {
     public void testValidacionPrecioNegativo() {
         System.out.println("TEST BO: Validación Precio Negativo");
         
-        ProductoDTO p = new ProductoDTO("Mala Silla", "...", -100.00, 5, Categoria.SILLAS, "img");
+        ProductoDTO p = new ProductoDTO("Mala Silla", "...", -100.00, 5, Categoria.SILLAS, "img", "mumu");
 
         NegocioException excepcion = assertThrows(NegocioException.class, () -> {
             productosBO.agregarProducto(p);
@@ -88,7 +88,7 @@ public class ProductosBOTest {
     public void testValidacionStockNegativo() {
         System.out.println("TEST BO: Validación Stock Negativo");
         
-        ProductoDTO p = new ProductoDTO("Mala Silla", "...", 100.00, -5, Categoria.SILLAS, "img");
+        ProductoDTO p = new ProductoDTO("Mala Silla", "...", 100.00, -5, Categoria.SILLAS, "img", "mumu");
 
         NegocioException excepcion = assertThrows(NegocioException.class, () -> {
             productosBO.agregarProducto(p);
@@ -101,7 +101,7 @@ public class ProductosBOTest {
     public void testValidacionNombreVacio() {
         System.out.println("TEST BO: Validación Nombre Vacío");
         
-        ProductoDTO p = new ProductoDTO("", "...", 100.00, 5, Categoria.SILLAS, "img");
+        ProductoDTO p = new ProductoDTO("", "...", 100.00, 5, Categoria.SILLAS, "img", "mumu");
 
         NegocioException excepcion = assertThrows(NegocioException.class, () -> {
             productosBO.agregarProducto(p);

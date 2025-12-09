@@ -63,8 +63,8 @@ public class ProductosDAOTest {
         System.out.println("obtenerTodos");
         
         // Insertar 2 productos
-        ProductoDTO p1 = new ProductoDTO(null, "P1", "Desc", 100.0, 5, Categoria.TECLADOS, "img1");
-        ProductoDTO p2 = new ProductoDTO(null, "P2", "Desc", 200.0, 5, Categoria.RATONES, "img2");
+        ProductoDTO p1 = new ProductoDTO(null, "P1", "Desc", 100.0, 5, Categoria.TECLADOS, "img1", "oli");
+        ProductoDTO p2 = new ProductoDTO(null, "P2", "Desc", 200.0, 5, Categoria.RATONES, "img2", "olo");
         
         productosDAO.agregar(p1);
         productosDAO.agregar(p2);
@@ -79,9 +79,9 @@ public class ProductosDAOTest {
         System.out.println("buscarConFiltros");
         
         // Preparar escenario: 1 Laptop barata, 1 Laptop cara, 1 Silla
-        ProductoDTO p1 = new ProductoDTO(null, "Laptop Dell", "Básica", 8000.0, 5, Categoria.LAPTOPS, "img");
-        ProductoDTO p2 = new ProductoDTO(null, "Laptop Gamer MSI", "Pro", 25000.0, 2, Categoria.LAPTOPS, "img");
-        ProductoDTO p3 = new ProductoDTO(null, "Silla Oficina", "Ergo", 3000.0, 10, Categoria.SILLAS, "img");
+        ProductoDTO p1 = new ProductoDTO(null, "Laptop Dell", "Básica", 8000.0, 5, Categoria.LAPTOPS, "img", "olo");
+        ProductoDTO p2 = new ProductoDTO(null, "Laptop Gamer MSI", "Pro", 25000.0, 2, Categoria.LAPTOPS, "img", "ala");
+        ProductoDTO p3 = new ProductoDTO(null, "Silla Oficina", "Ergo", 3000.0, 10, Categoria.SILLAS, "img", "fak");
         
         productosDAO.agregar(p1);
         productosDAO.agregar(p2);
@@ -103,7 +103,7 @@ public class ProductosDAOTest {
         System.out.println("actualizarProducto");
         
         // 1. Crear
-        ProductoDTO original = new ProductoDTO(null, "Mouse Viejo", "Desc", 100.0, 10, Categoria.RATONES, "img");
+        ProductoDTO original = new ProductoDTO(null, "Mouse Viejo", "Desc", 100.0, 10, Categoria.RATONES, "img", "shin");
         ProductoDTO insertado = productosDAO.agregar(original);
         
         // 2. Modificar objeto
@@ -125,7 +125,7 @@ public class ProductosDAOTest {
     public void testEliminarProducto() throws PersistenciaException {
         System.out.println("eliminarProducto");
         
-        ProductoDTO p = new ProductoDTO(null, "Borrarme", "...", 10.0, 1, Categoria.COMPONENTES, "...");
+        ProductoDTO p = new ProductoDTO(null, "Borrarme", "...", 10.0, 1, Categoria.COMPONENTES, "...", "mumu");
         ProductoDTO insertado = productosDAO.agregar(p);
         
         boolean exito = productosDAO.eliminar(insertado.getId());

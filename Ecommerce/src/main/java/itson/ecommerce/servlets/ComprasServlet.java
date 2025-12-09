@@ -184,12 +184,27 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
         if (carrito == null || carrito.getCantidadItems() == 0) {
-            response.sendRedirect("carrito.jsp?error=vacio");
+            response.sendRedirect("carrito.jsp?error=Carritovacio");
             return;
         }
 
         try {
-            // 2. Convertir items del Carrito a DetalleCompraDTO
+            //2. Recoger datos del formulario (Validación de entrada)
+            String calle = request.getParameter("calle");
+            String colonia = request.getParameter("colonia");
+            String ciudad = request.getParameter("cp");
+            String cp = request.getParameter("cp");
+            String metodoPago = request.getParameter("metodoPago");
+            
+            //3. Validamos campos no nulos
+            if(calle == null || calle.isEmpty() || ciudad == null || ciudad.isEmpty()) {
+                throw new Exception("La dirección de envío está incompleta");
+            }
+            
+            //4. Construimo,os la dirección completa
+            String dirCompleta = String.format("%sm %s, %s, CP: %s", calle, colonia, ciudad, cp);
+            
+            // 5. Convertir items del Carrito a DetalleCompraDTO
             List<DetalleCompraDTO> detalles = new ArrayList<>();
             for (ItemCarrito item : carrito.getListaItems()) {
                 detalles.add(new DetalleCompraDTO(
@@ -200,19 +215,19 @@ public class ComprasServlet extends HttpServlet {
                 ));
             }
 
-            // 3. Armar el objeto CompraDTO
+            // 6. Armar el objeto CompraDTO
             CompraDTO compra = new CompraDTO();
             compra.setUsuarioId(usuario.getId());
             compra.setTotal(carrito.getTotal());
             compra.setDetalles(detalles);
-            compra.setDireccionEnvio(usuario.getDireccion()); // Usamos la dirección del perfil
+            compra.setDireccionEnvio(dirCompleta); // Usamos la del form
             compra.setMetodoPago("Tarjeta Simulada");
             compra.setEstado(EstadoCompra.PENDIENTE);
 
-            // 4. Llamar al BO (Esto guarda la compra y descuenta el stock)
+            // 7. Llamar al BO (Esto guarda la compra y descuenta el stock)
             CompraDTO compraRealizada = comprasBO.realizarCompra(compra);
 
-            // 5. Éxito: Limpiar carrito y mandar a confirmación
+            // 8. Éxito: Limpiar carrito y mandar a confirmación
             session.removeAttribute("carrito");
             
             // Pasamos el objeto compra al JSP de confirmación
@@ -222,7 +237,7 @@ public class ComprasServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             // Si falla (ej. stock insuficiente), volvemos al carrito con el error
-            response.sendRedirect("carrito.jsp?error=" + e.getMessage());
+            response.sendRedirect("carrito.jsp?error=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         }
     }
 }

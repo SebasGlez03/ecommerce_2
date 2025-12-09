@@ -1,3 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -32,62 +35,43 @@
             </div>
 
             <div class="user_section">
-                <a class="login_btn" href="login.html">Iniciar Sesión</a>
+                <a class="login_btn" href="login.html">Iniciar SesiÃ³n</a>
                 <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png" alt="Avatar">
             </div>
         </header>
 
         <div class="payment_container">
-            
-            <!-- Lado Izquierdo: Formulario -->
-            <div class="payment_form_card">
-                <h2 class="form_title">Tarjeta de débito o crédito</h2>
+    
+        <div class="payment_form_card">
+            <h2 class="form_title">Tarjeta de débito o crédito</h2>
 
-                <form action="#" class="form_grid">
-                    <!-- Tarjeta -->
-                    <input type="text" class="custom_input full_width" placeholder="Número de tarjeta">
-                    
-                    <input type="text" class="custom_input" placeholder="Fecha de vencimiento">
-                    <input type="text" class="custom_input" placeholder="CSC">
+            <form id="formPago" action="compras" method="POST" class="form_grid">
+                <input type="hidden" name="accion" value="pagar">
+                <input type="hidden" name="metodoPago" value="Tarjeta">
 
-                    <!-- Dirección Label -->
-                    <label class="form_section_label full_width">Dirección de la tarjeta</label>
+                <input type="text" class="custom_input full_width" placeholder="Número de tarjeta" required pattern="\d{16}" title="16 dígitos">
 
-                    <!-- Nombres -->
-                    <input type="text" class="custom_input" placeholder="Nombre">
-                    <input type="text" class="custom_input" placeholder="Apellidos">
+                <input type="text" class="custom_input" placeholder="MM/YY" required>
+                <input type="text" class="custom_input" placeholder="CVC" required>
 
-                    <!-- Dirección Completa -->
-                    <input type="text" class="custom_input full_width" placeholder="Dirección">
-                    
-                    <input type="text" class="custom_input full_width" placeholder="Colonia">
-                    
-                    <input type="text" class="custom_input full_width" placeholder="Ciudad">
-                    
-                    <input type="text" class="custom_input full_width" placeholder="Estado">
-                    
-                    <input type="text" class="custom_input full_width" placeholder="Código Postal">
-                    
-                    <input type="email" class="custom_input full_width" placeholder="Correo Electrónico">
-                </form>
+                <label class="form_section_label full_width">Dirección de Envío</label>
+
+                <input type="text" name="calle" class="custom_input full_width" placeholder="Calle y Número" required value="${sessionScope.usuarioLogueado.direccion}">
+
+                <input type="text" name="colonia" class="custom_input full_width" placeholder="Colonia" required>
+
+                <input type="text" name="ciudad" class="custom_input full_width" placeholder="Ciudad" required>
+
+                <input type="text" name="cp" class="custom_input full_width" placeholder="Código Postal" required>
+            </form>
+        </div>
+
+        <div class="payment_methods_col">
+            <div class="pay_btn_container">
+                <button type="submit" form="formPago" class="btn_pay">
+                    Pagar $${sessionScope.carrito.total}
+                </button>
             </div>
-
-            <!-- Lado Derecho: Opciones de Pago -->
-            <div class="payment_methods_col">
-                <div class="methods_group">
-                    <button class="method_btn active">Tarjeta</button>
-                    <button class="method_btn secondary">Transferencia</button>
-                    <button class="method_btn secondary">Contra Entrega</button>
-                </div>
-
-                <div class="pay_btn_container">
-                    <form action="compras" method="POST">
-                        <input type="hidden" name="accion" value="pagar">
-                        <button type="submit" class="btn_pay">Pagar $${sessionScope.carrito.total}</button>
-                    </form>
-                </div>
-            </div>
-
         </div>
 
         <footer class="footer">

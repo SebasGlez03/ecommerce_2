@@ -64,7 +64,7 @@ public class ComprasBOTest {
         System.out.println("TEST BO: Compra Exitosa y Descuento de Stock");
 
         // 1. PREPARACIÓN: Crear un producto con Stock = 10
-        ProductoDTO productoOriginal = new ProductoDTO("Laptop", "Desc", 15000.0, 10, Categoria.LAPTOPS, "img");
+        ProductoDTO productoOriginal = new ProductoDTO("Laptop", "Desc", 15000.0, 10, Categoria.LAPTOPS, "img", "momu");
         // Usamos el DAO directo para preparar el escenario rápido (sin pasar por validaciones del BO de productos)
         productoOriginal = productosDAO.agregar(productoOriginal);
         ObjectId idProd = productoOriginal.getId();
@@ -97,7 +97,7 @@ public class ComprasBOTest {
         System.out.println("TEST BO: Falla por Stock Insuficiente");
 
         // 1. Preparar producto con POCO stock (Solo 1)
-        ProductoDTO producto = productosDAO.agregar(new ProductoDTO("Mouse", "...", 500.0, 1, Categoria.RATONES, "img"));
+        ProductoDTO producto = productosDAO.agregar(new ProductoDTO("Mouse", "...", 500.0, 1, Categoria.RATONES, "img", "omg"));
         
         // 2. Intentar comprar 5
         List<DetalleCompraDTO> detalles = new ArrayList<>();

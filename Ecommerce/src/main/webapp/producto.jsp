@@ -51,6 +51,20 @@
             <div class="product_details">
                 <h1 class="product_title">${producto.nombre}</h1>
                 
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                    <div style="color:gold; font-size:20px;">
+                        <c:forEach begin="1" end="5" var="i">
+                            <c:choose>
+                                <c:when test="${i <= producto.promedioCalificacion}">★</c:when>
+                                <c:otherwise>☆</c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </div>
+                    <span style="color:#888; font-size:14px;">
+                        (<fmt:formatNumber value="${producto.promedioCalificacion}" maxFractionDigits="1"/> / 5.0)
+                    </span>
+                </div>
+                    
                 <div class="availability">
                     <c:choose>
                         <c:when test="${producto.stock > 0}">
@@ -63,6 +77,14 @@
                 </div>
 
                 <p class="product_description">${producto.descripcion}</p>
+                
+                <c:if test="${not empty producto.especificaciones}">
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin:20px 0;">
+                        <h4 style="margin-top:0; color:var(--color-bg-6th);">Especificaciones Técnicas</h4>
+                        <p style="white-space: pre-line; color:#ccc; font-size:14px; margin:0;">${producto.especificaciones}</p>
+                    </div>
+                </c:if>
+                
                 <hr class="divider">
                 <div class="product_price">$${producto.precio}</div>
                 

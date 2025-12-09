@@ -5,7 +5,6 @@
 package itson.ecommercedominio;
 
 import itson.ecommercedominio.enumeradores.Categoria;
-import java.util.Date;
 import org.bson.types.ObjectId;
 
 /**
@@ -20,20 +19,22 @@ public class Producto {
     private Integer stock;
     private Categoria categoria;
     private String imagenUrl;
-
+    private String especificaciones;
+    
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl) {
+    public Producto(String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl, String especificaciones) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
         this.categoria = categoria;
         this.imagenUrl = imagenUrl;
+        this.especificaciones = especificaciones;
     }
-    
-    public Producto(ObjectId id, String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl) {
+
+    public Producto(ObjectId id, String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl, String especificaciones) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -41,6 +42,7 @@ public class Producto {
         this.stock = stock;
         this.categoria = categoria;
         this.imagenUrl = imagenUrl;
+        this.especificaciones = especificaciones;
     }
 
     public ObjectId getId() {
@@ -97,6 +99,13 @@ public class Producto {
 
     public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
+    }
+
+    public String getEspecificaciones() {
+        return especificaciones;
+    }
+
+    public void setEspecificaciones(String especificaciones) {
+        this.especificaciones = especificaciones;
     }    
-    
 }
