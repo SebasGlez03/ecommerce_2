@@ -25,4 +25,6 @@ public interface IUsuariosDAO {
     public List<UsuarioDTO> obtenerTodos() throws PersistenciaException;
 
     public void actualizarEstado(ObjectId idUsuario, boolean esActivo) throws PersistenciaException;
+
+    public UsuarioDTO obtenerUsuarioPorId(ObjectId id) throws PersistenciaException;
 }
