@@ -8,14 +8,6 @@
         <servlet-name>UsuariosServlet</servlet-name>
         <url-pattern>/usuarios</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>ReseniasServlet</servlet-name>
-        <servlet-class>itson.ecommerce.servlets.ReseniasServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ReseniasServlet</servlet-name>
-        <url-pattern>/resenias</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

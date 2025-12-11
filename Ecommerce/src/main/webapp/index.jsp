@@ -6,6 +6,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:if test="${empty listaProductos and param.accion == null}">
+    <c:redirect url="productos"/>
+</c:if>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -24,7 +28,11 @@
             </div>
 
             <nav class="nav_items">
-                <a href="#">Categorías</a>
+                <div class="categorias">
+                    <h3 id="titulo_categorias">Categorías</h3>
+                    <a class="categorias_disponibles" href="productos?categoria=AUDIFONOS">Audífonos</a>
+                    <a class="categorias_disponibles" href="productos?categoria=MONITORES">Monitores</a>
+                </div>
                 <a href="#">Ofertas</a>
                 
                 <c:if test="${sessionScope.usuarioLogueado.rolUsuario == 'ADMIN'}">
@@ -95,21 +103,38 @@
                 <div class="titulo_productos_generales">
                     <h2>Todos los Productos</h2>
                 </div>
-
+                
+                
+                
                 <div class="general_products_container">
                     <div class="general_products_track">
-                        <div class="general_product_card">
-                            <a href="producto.html"><img src="https://ddtech.mx/assets/uploads/5997d0cf7ca7c87102910fcc679904d2.png" alt="P1"></a>
-                            <div class="general_product_info"><p>GPU ASUS</p><p>$6,999.00</p></div>
-                        </div>
-                        <div class="general_product_card">
-                            <a href="producto.html"><img src="https://ddtech.mx/assets/uploads/a37e74c2b15f984d31e6a4748886188c.png" alt="P2"></a>
-                            <div class="general_product_info"><p>GPU GIGABYTE</p><p>$11,999.00</p></div>
-                        </div>
-                        <div class="general_product_card">
-                            <a href="producto.html"><img src="https://ddtech.mx/assets/uploads/840df05686e37516f65155f8c0caeeaa.jpg" alt="P3"></a>
-                            <div class="general_product_info"><p>Ventiladores</p><p>$399.00</p></div>
-                        </div>
+
+                        <c:forEach var="p" items="${listaProductos}">
+                            <div class="general_product_card">
+                                <a href="productos?accion=ver&id=${p.id}">
+                                    <img src="${p.imagenUrl}" alt="${p.nombre}">
+                                </a>
+                                <div class="general_product_info">
+                                    <p><b>${p.nombre}</b></p>
+                                    <p style="color: #4ade80;">$${p.precio}</p>
+                                </div>
+
+                                <form action="carrito" method="POST" style="margin-top: 5px;">
+                                    <input type="hidden" name="accion" value="agregar">
+                                    <input type="hidden" name="idProducto" value="${p.id}">
+                                    <input type="hidden" name="cantidad" value="1"> <button class="add_to_cart_btn" style="padding: 5px 10px; font-size: 12px; width: 100%;">
+                                        Agregar
+                                    </button>
+                                </form>
+                            </div>
+                        </c:forEach>
+
+                        <c:if test="${empty listaProductos}">
+                            <p style="color: white; text-align: center; width: 100%;">
+                                No se encontraron productos disponibles.
+                            </p>
+                        </c:if>
+
                     </div>
                 </div>
             </div>

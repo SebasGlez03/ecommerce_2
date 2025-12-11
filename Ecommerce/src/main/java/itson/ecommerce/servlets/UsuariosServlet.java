@@ -36,6 +36,7 @@ public class UsuariosServlet extends HttpServlet {
     /**
      * El metodo init() se llama una sola vez cuando el Servlet es creado. Aqui
      * se crea la cadena de dependencias.
+     * @throws jakarta.servlet.ServletException
      */
     @Override
     public void init() throws ServletException {

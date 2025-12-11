@@ -7,10 +7,12 @@ package itson.ecommercepersistencia.implementaciones;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
 import itson.ecommercedominio.Compra;
 import itson.ecommercedominio.DetalleCompra;
 import itson.ecommercedominio.dtos.CompraDTO;
 import itson.ecommercedominio.dtos.DetalleCompraDTO;
+import itson.ecommercedominio.enumeradores.EstadoCompra;
 import itson.ecommercepersistencia.IComprasDAO;
 import itson.ecommercepersistencia.IConexionBD;
 import itson.ecommercepersistencia.excepciones.PersistenciaException;
@@ -35,6 +37,7 @@ public class ComprasDAO implements IComprasDAO{
     public CompraDTO crear(CompraDTO compraDTO) throws PersistenciaException {
         try {
             // 1. Convertir DTO a Entidad
+            compraDTO.setId(new ObjectId());
             Compra compra = convertirAEntidad(compraDTO);
 
             // 2. Insertar en MongoDB
@@ -44,6 +47,32 @@ public class ComprasDAO implements IComprasDAO{
             return convertirADTO(compra);
         } catch (Exception e) {
             throw new PersistenciaException("Error al registrar la compra: " + e.getMessage(), e);
+        }
+    }
+    
+    @Override
+    public void actualizarEstado(ObjectId idCompra, EstadoCompra nuevoEstado) throws PersistenciaException {
+        try {
+            coleccion.updateOne(Filters.eq("_id", idCompra), Updates.set("estado", nuevoEstado));
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al actualizar estado de la compra.", e);
+        }
+    }
+    
+    @Override
+    public List<CompraDTO> obtenerTodas() throws PersistenciaException {
+        try {
+            List<Compra> listaEntidades = new ArrayList<>();
+            // Sin filtro, ordena por fecha descendente
+            coleccion.find()
+                     .sort(Sorts.descending("fechaCompra"))
+                     .into(listaEntidades);
+
+            return listaEntidades.stream()
+                    .map(this::convertirADTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al obtener todas las compras.", e);
         }
     }
 

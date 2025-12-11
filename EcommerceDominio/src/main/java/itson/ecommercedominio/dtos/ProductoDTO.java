@@ -20,20 +20,13 @@ public class ProductoDTO {
     private Integer stock;
     private Categoria categoria;
     private String imagenUrl;
+    private String especificaciones;
+    private Double promedioCalificacion;
 
     public ProductoDTO() {
     }
 
-    public ProductoDTO(String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.stock = stock;
-        this.categoria = categoria;
-        this.imagenUrl = imagenUrl;
-    }
-
-    public ProductoDTO(ObjectId id, String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl) {
+    public ProductoDTO(ObjectId id, String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl, String especificaciones) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -41,6 +34,18 @@ public class ProductoDTO {
         this.stock = stock;
         this.categoria = categoria;
         this.imagenUrl = imagenUrl;
+        this.especificaciones = especificaciones;
+    }
+    
+    // Constructor sin ID (para crear)
+    public ProductoDTO(String nombre, String descripcion, Double precio, Integer stock, Categoria categoria, String imagenUrl, String especificaciones) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.stock = stock;
+        this.categoria = categoria;
+        this.imagenUrl = imagenUrl;
+        this.especificaciones = especificaciones;
     }
 
     public ObjectId getId() {
@@ -98,4 +103,22 @@ public class ProductoDTO {
     public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
     }
+
+    public String getEspecificaciones() {
+        return especificaciones;
+    }
+
+    public void setEspecificaciones(String especificaciones) {
+        this.especificaciones = especificaciones;
+    }
+
+    public Double getPromedioCalificacion() {
+        return promedioCalificacion;
+    }
+
+    public void setPromedioCalificacion(Double promedioCalificacion) {
+        this.promedioCalificacion = promedioCalificacion;
+    }
+    
+    
 }

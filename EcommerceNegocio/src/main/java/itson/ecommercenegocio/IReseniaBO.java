@@ -5,16 +5,21 @@
 package itson.ecommercenegocio;
 
 import itson.ecommercedominio.Resenia;
+import itson.ecommercedominio.dtos.ReseniaDTO;
 import itson.ecommercedominio.dtos.UsuarioDTO;
 import itson.ecommercenegocio.excepciones.NegocioException;
+import itson.ecommercepersistencia.excepciones.PersistenciaException;
+import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author santi
  */
 public interface IReseniaBO {
-    
-    public void eliminarResenia(String idReseniaString, UsuarioDTO usuarioSolicitante) throws NegocioException;
-    public void crearResenia(Resenia resenia) throws NegocioException;
-
+    void crearResenia(ReseniaDTO reseniaDTO) throws NegocioException;
+    void eliminarResenia(String idReseniaString, UsuarioDTO usuarioSolicitante) throws NegocioException;
+    List<ReseniaDTO> obtenerReseniasPorProducto(ObjectId idProducto) throws NegocioException;
+    List<ReseniaDTO> obtenerReseniasPorUsuario(ObjectId idUsuario) throws NegocioException;
+    ReseniaDTO obtenerPrimeraReseniaPorUsuario(ObjectId idUsuario) throws NegocioException;
 }
