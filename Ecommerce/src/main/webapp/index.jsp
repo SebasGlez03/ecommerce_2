@@ -123,30 +123,9 @@
                     <img class="img_oferta" src="https://www.cyberpuerta.mx/out/pictures/banner-manager/bundle-nvidia-arc-raiders-oct25-hb-cp.jpg?1760454915" alt="Ofertas">
                 </div>
 
-                <div class="titulo_productos_destacados">
-                    <h2>Productos Destacados</h2>
-                </div>
+                
 
-                <div class="carousel_container">
-                    <div class="carousel_track">
-                        <div class="product_card">
-                            <img src="https://ddtech.mx/assets/uploads/27dc82b93650bc921da9076e74babdbe.png" alt="Prod 1">
-                            <div class="product_info"><p>Teclado Gamer</p><p>$399.00</p></div>
-                        </div>
-                        <div class="product_card">
-                            <img src="https://ddtech.mx/assets/uploads/57867eb0af4d762c9a9b7b84fec4702a.png" alt="Prod 2">
-                            <div class="product_info"><p>Diadema Gamer</p><p>$5,299.00</p></div>
-                        </div>
-                        <div class="product_card">
-                            <img src="https://ddtech.mx/assets/uploads/c10a87543113eb7c3bb9caaf958119bf.png" alt="Prod 3">
-                            <div class="product_info"><p>Mochila Gamer</p><p>$799.00</p></div>
-                        </div>
-                        <div class="product_card">
-                            <img src="https://ddtech.mx/assets/uploads/e22f6d5e9dd5c30f6737665e5da99899.png" alt="Prod 4">
-                            <div class="product_info"><p>Mouse Corsair</p><p>$2,899.00</p></div>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <div class="titulo_productos_generales">
                     <h2>Todos los Productos</h2>
