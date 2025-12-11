@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import itson.ecommercedominio.Compra;
 import itson.ecommercedominio.DetalleCompra;
 import itson.ecommercedominio.dtos.CompraDTO;
@@ -19,6 +20,7 @@ import itson.ecommercepersistencia.excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
@@ -53,7 +55,24 @@ public class ComprasDAO implements IComprasDAO{
     @Override
     public void actualizarEstado(ObjectId idCompra, EstadoCompra nuevoEstado) throws PersistenciaException {
         try {
-            coleccion.updateOne(Filters.eq("_id", idCompra), Updates.set("estado", nuevoEstado));
+            // 1. Imprimimos para confirmar que los datos llegan bien (Míralo en Output de NetBeans)
+            System.out.println("[DEBUG] Actualizando Compra ID: " + idCompra);
+            System.out.println("[DEBUG] Nuevo Estado: " + nuevoEstado.name());
+
+            // 2. IMPORTANTE: Guardamos el estado como STRING usando .name()
+            // Esto evita problemas de compatibilidad con el POJO Codec de Mongo
+            Bson update = Updates.set("estado", nuevoEstado.name()); 
+            
+            // 3. Ejecutamos la actualización
+            UpdateResult resultado = coleccion.updateOne(Filters.eq("_id", idCompra), update);
+
+            // 4. Verificamos si hizo algo
+            if(resultado.getMatchedCount() > 0){
+                System.out.println("[EXITO] Se encontró el pedido y se actualizó.");
+            } else {
+                System.out.println("[ERROR] No se encontró ningún pedido con ese ID.");
+            }
+            
         } catch (Exception e) {
             throw new PersistenciaException("Error al actualizar estado de la compra.", e);
         }
