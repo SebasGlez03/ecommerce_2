@@ -34,10 +34,11 @@ import org.bson.types.ObjectId;
  */
 @WebServlet(name = "ProductosServlet", urlPatterns = {"/productos"})
 public class ProductosServlet extends HttpServlet {
+
     private IProductosBO productosBO;
     private IReseniaBO reseniasBO;
     private IConexionBD conexion;
-    
+
     @Override
     public void init() throws ServletException {
         try {
@@ -52,10 +53,10 @@ public class ProductosServlet extends HttpServlet {
             throw new ServletException("No se pudo conectar a la Base de Datos", e);
         }
     }
-    
+
     @Override
     public void destroy() {
-        if(this.conexion != null) {
+        if (this.conexion != null) {
             this.conexion.close();
         }
     }
@@ -64,7 +65,9 @@ public class ProductosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        if (accion == null) accion = "listar";
+        if (accion == null) {
+            accion = "listar";
+        }
 
         switch (accion) {
             case "listarAdmin":
@@ -114,7 +117,6 @@ public class ProductosServlet extends HttpServlet {
     }
 
     // --- MÉTODOS PRIVADOS PARA ORDENAR EL CÓDIGO ---
-
     private void cargarListaAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<ProductoDTO> lista = productosBO.obtenerTodos();
@@ -145,18 +147,34 @@ public class ProductosServlet extends HttpServlet {
         try {
             String busqueda = request.getParameter("busqueda");
             String categoriaParam = request.getParameter("categoria");
+
+            // 1. NUEVO: Leer parámetros de precio
+            String precioMinStr = request.getParameter("precioMin");
+            String precioMaxStr = request.getParameter("precioMax");
+
             Categoria catEnum = null;
+            Double precioMin = null;
+            Double precioMax = null;
 
             if (categoriaParam != null && !categoriaParam.isEmpty()) {
-                catEnum = Categoria.valueOf(categoriaParam);
+                try {
+                    catEnum = Categoria.valueOf(categoriaParam);
+                } catch (IllegalArgumentException e) {
+                    // Categoría inválida, la ignoramos
+                }
             }
 
-            List<ProductoDTO> productos;
-            if ((busqueda != null && !busqueda.isEmpty()) || catEnum != null) {
-                productos = productosBO.buscarProductos(busqueda, catEnum, null, null);
-            } else {
-                productos = productosBO.obtenerTodos();
+            // 2. NUEVO: Convertir precios a Double si existen
+            if (precioMinStr != null && !precioMinStr.isEmpty()) {
+                precioMin = Double.parseDouble(precioMinStr);
             }
+            if (precioMaxStr != null && !precioMaxStr.isEmpty()) {
+                precioMax = Double.parseDouble(precioMaxStr);
+            }
+
+            // 3. ACTUALIZADO: Llamar al BO con TODOS los filtros
+            // Antes pasabas (busqueda, catEnum, null, null). Ahora pasamos las variables.
+            List<ProductoDTO> productos = productosBO.buscarProductos(busqueda, catEnum, precioMin, precioMax);
 
             request.setAttribute("listaProductos", productos);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
@@ -173,25 +191,25 @@ public class ProductosServlet extends HttpServlet {
                 response.sendRedirect("productos");
                 return;
             }
-            
+
             //Obtenemos el producto y las reseñas
             ObjectId idProducto = new ObjectId(idString);
             ProductoDTO producto = productosBO.obtenerProductoPorId(idProducto);
             List<ReseniaDTO> resenias = reseniasBO.obtenerReseniasPorProducto(idProducto);
-            
+
             //Calculamos el promedio de reseñas
             double promedio = 0.0;
-            if(resenias != null && !resenias.isEmpty()){
+            if (resenias != null && !resenias.isEmpty()) {
                 double suma = 0;
                 for (ReseniaDTO r : resenias) {
                     suma += r.getCalificacion();
                 }
-                promedio = suma/resenias.size();
+                promedio = suma / resenias.size();
             }
-            
+
             //Lo guardamos en el DTO
             producto.setPromedioCalificacion(promedio);
-            
+
             request.setAttribute("producto", producto);
             request.setAttribute("listaResenias", resenias);
             request.getRequestDispatcher("/producto.jsp").forward(request, response);
@@ -202,7 +220,6 @@ public class ProductosServlet extends HttpServlet {
     }
 
     // --- ACCIONES DE ESCRITURA (POST) ---
-
     private void guardarProducto(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ProductoDTO nuevo = extraerProductoDeRequest(request);
         // Validar que NO tenga ID para creación
@@ -214,7 +231,7 @@ public class ProductosServlet extends HttpServlet {
         String idStr = request.getParameter("idProducto");
         ProductoDTO producto = extraerProductoDeRequest(request);
         producto.setId(new ObjectId(idStr)); // Asignamos ID para edición
-        
+
         productosBO.actualizarProducto(producto);
         response.sendRedirect(request.getContextPath() + "/productos?accion=listarAdmin");
     }
@@ -234,7 +251,7 @@ public class ProductosServlet extends HttpServlet {
         String imagenUrl = request.getParameter("imagenUrl");
         Categoria categoria = Categoria.valueOf(request.getParameter("categoria"));
         String especificaciones = request.getParameter("especificaciones");
-        
+
         return new ProductoDTO(nombre, descripcion, precio, stock, categoria, imagenUrl, especificaciones);
     }
 }

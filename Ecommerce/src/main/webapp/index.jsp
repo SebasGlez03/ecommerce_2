@@ -28,11 +28,7 @@
             </div>
 
             <nav class="nav_items">
-                <div class="categorias">
-                    <h3 id="titulo_categorias">Categorías</h3>
-                    <a class="categorias_disponibles" href="productos?categoria=AUDIFONOS">Audífonos</a>
-                    <a class="categorias_disponibles" href="productos?categoria=MONITORES">Monitores</a>
-                </div>
+
                 <a href="#">Ofertas</a>
 
                 <c:if test="${sessionScope.usuarioLogueado.rolUsuario == 'ADMIN'}">
@@ -42,8 +38,20 @@
             </nav>
 
             <div class="search_container">
-                <input type="text" placeholder="Buscar productos...">
-                <i data-lucide="search" style="width: 18px; color: var(--color-txt-secondary);"></i>
+                <form action="productos" method="GET" style="width: 100%; display: flex; align-items: center;">
+                    <%-- Input principal de búsqueda --%>
+                    <input type="text" name="busqueda" placeholder="Buscar productos..." value="${param.busqueda}">
+
+                    <%-- TRUCO: Si el usuario ya está en una categoría, la mantenemos oculta en el formulario --%>
+                    <c:if test="${not empty param.categoria}">
+                        <input type="hidden" name="categoria" value="${param.categoria}">
+                    </c:if>
+
+                    <%-- El icono ahora es un botón de submit --%>
+                    <button type="submit" style="background: none; border: none; cursor: pointer; display: flex; align-items: center;">
+                        <i data-lucide="search" style="width: 18px; color: var(--color-txt-secondary);"></i>
+                    </button>
+                </form>
             </div>
 
             <div class="user_section">
@@ -76,11 +84,38 @@
         <div class="contenedor">
             <div class="categorias">
                 <h3 id="titulo_categorias">Categorías</h3>
-                <a class="categorias_disponibles" href="">Audifonos</a><br>
-                <a class="categorias_disponibles" href="">Monitores</a><br>
-                <a class="categorias_disponibles" href="">Teclados</a><br>
-                <a class="categorias_disponibles" href="">Ratones</a><br>
-                <a class="categorias_disponibles" href="">Sillas</a>
+
+                <a class="categorias_disponibles" href="productos?categoria=AUDIFONOS">Audífonos</a>
+                <a class="categorias_disponibles" href="productos?categoria=MONITORES">Monitores</a>
+                <a class="categorias_disponibles" href="productos?categoria=TECLADOS">Teclados</a>
+                <a class="categorias_disponibles" href="productos?categoria=RATONES">Ratones</a>
+                <a class="categorias_disponibles" href="productos?categoria=SILLAS">Sillas</a>
+                <a class="categorias_disponibles" href="productos?categoria=COMPONENTES">Componentes</a>
+                <a class="categorias_disponibles" href="productos?categoria=LAPTOPS">Laptops</a>
+
+
+                <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                    <h3>Rango de Precio</h3>
+                    <form action="productos" method="GET" style="display: flex; flex-direction: column; gap: 10px;">
+
+                        <%-- Mantenemos la categoría (Esto ya lo tenías) --%>
+                        <c:if test="${not empty param.categoria}">
+                            <input type="hidden" name="categoria" value="${param.categoria}">
+                        </c:if>
+
+                        <%-- NUEVO: Mantenemos la búsqueda si existe --%>
+                        <c:if test="${not empty param.busqueda}">
+                            <input type="hidden" name="busqueda" value="${param.busqueda}">
+                        </c:if>
+
+                        <input type="number" name="precioMin" placeholder="Mínimo" min="0" step="0.01" class="input-precio" value="${param.precioMin}">
+                        <input type="number" name="precioMax" placeholder="Máximo" min="0" step="0.01" class="input-precio" value="${param.precioMax}">
+
+                        <button type="submit" class="btn-filtrar">Filtrar</button>
+
+                        <a href="index.jsp" style="font-size: 12px; text-align: center; color: #888; margin-top: 5px;">Limpiar Filtros</a>
+                    </form>
+                </div>
             </div>
 
             <div class="info">

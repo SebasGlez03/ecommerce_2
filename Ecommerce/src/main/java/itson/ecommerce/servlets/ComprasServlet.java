@@ -29,6 +29,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.types.ObjectId;
+import itson.ecommerce.utils.EmailService;
 
 /**
  *
@@ -36,22 +37,23 @@ import org.bson.types.ObjectId;
  */
 @WebServlet(name = "ComprasServlet", urlPatterns = {"/compras"})
 public class ComprasServlet extends HttpServlet {
+
     private IComprasBO comprasBO;
     private IConexionBD conexion;
-    
+
     @Override
     public void init() throws ServletException {
         this.conexion = new ConexionBD(false);
         this.comprasBO = new ComprasBO(new ComprasDAO(this.conexion), new ProductosDAO(this.conexion));
     }
-    
+
     @Override
     public void destroy() {
-        if(this.conexion != null) {
+        if (this.conexion != null) {
             this.conexion.close();
         }
     }
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -108,8 +110,7 @@ public class ComprasServlet extends HttpServlet {
                 e.printStackTrace();
                 response.sendRedirect("index.jsp");
             }
-        } 
-        // NUEVA LÓGICA ADMIN
+        } // NUEVA LÓGICA ADMIN
         else if ("adminListar".equals(accion)) {
             if (usuario.getRolUsuario() != RolUsuario.ADMIN) {
                 response.sendRedirect("index.jsp");
@@ -141,19 +142,18 @@ public class ComprasServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        
+
         if ("pagar".equals(accion)) {
             procesarPago(request, response);
-        } 
-        // NUEVA LÓGICA ADMIN
+        } // NUEVA LÓGICA ADMIN
         else if ("actualizarEstado".equals(accion)) {
             try {
                 String idCompra = request.getParameter("idCompra");
                 String estadoStr = request.getParameter("nuevoEstado");
                 EstadoCompra estado = EstadoCompra.valueOf(estadoStr);
-                
+
                 comprasBO.actualizarEstado(new ObjectId(idCompra), estado);
-                
+
                 response.sendRedirect("compras?accion=adminListar");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -195,23 +195,23 @@ public class ComprasServlet extends HttpServlet {
             String ciudad = request.getParameter("cp");
             String cp = request.getParameter("cp");
             String metodoPago = request.getParameter("metodoPago");
-            
+
             //3. Validamos campos no nulos
-            if(calle == null || calle.isEmpty() || ciudad == null || ciudad.isEmpty()) {
+            if (calle == null || calle.isEmpty() || ciudad == null || ciudad.isEmpty()) {
                 throw new Exception("La dirección de envío está incompleta");
             }
-            
+
             //4. Construimo,os la dirección completa
             String dirCompleta = String.format("%sm %s, %s, CP: %s", calle, colonia, ciudad, cp);
-            
+
             // 5. Convertir items del Carrito a DetalleCompraDTO
             List<DetalleCompraDTO> detalles = new ArrayList<>();
             for (ItemCarrito item : carrito.getListaItems()) {
                 detalles.add(new DetalleCompraDTO(
-                    item.getProductoId(),
-                    item.getNombre(),
-                    item.getCantidad(),
-                    item.getPrecioUnitario()
+                        item.getProductoId(),
+                        item.getNombre(),
+                        item.getCantidad(),
+                        item.getPrecioUnitario()
                 ));
             }
 
@@ -227,16 +227,22 @@ public class ComprasServlet extends HttpServlet {
             // 7. Llamar al BO (Esto guarda la compra y descuenta el stock)
             CompraDTO compraRealizada = comprasBO.realizarCompra(compra);
 
+            // --- NUEVO: ENVIAR CORREO ---
+            // Ejecutamos en un hilo separado para no congelar la pantalla del usuario
+            new Thread(() -> {
+                EmailService emailService = new EmailService();
+                emailService.enviarConfirmacionCompra(usuario.getEmail(), compraRealizada);
+            }).start();
+            // ---------------------------
+
             // 8. Éxito: Limpiar carrito y mandar a confirmación
             session.removeAttribute("carrito");
-            
-            // Pasamos el objeto compra al JSP de confirmación
+
             request.setAttribute("compra", compraRealizada);
             request.getRequestDispatcher("confirmacion.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Si falla (ej. stock insuficiente), volvemos al carrito con el error
             response.sendRedirect("carrito.jsp?error=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         }
     }
