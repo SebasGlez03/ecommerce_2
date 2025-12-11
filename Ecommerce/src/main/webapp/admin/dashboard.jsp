@@ -48,14 +48,16 @@
             <p>Bienvenido al área de gestión administrativa.</p>
 
             <div class="admin-grid">
-                <div class="card-admin" onclick="alert('Funcionalidad de gestión de usuarios pendiente (Req 1.3)')">
-                    <i data-lucide="users" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
-                    <h3>Usuarios</h3>
-                    <p>Gestionar clientes y administradores</p>
-                </div>
+                <a href="../usuarios?accion=listarAdmin" style="text-decoration:none;">
+                    <div class="card-admin">
+                        <i data-lucide="users" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
+                        <h3>Usuarios</h3>
+                        <p>Gestionar clientes y administradores</p>
+                    </div>
+                </a>
 
                 <a href="../productos?accion=listarAdmin" style="text-decoration:none;">
-                    <div class="card-admin" onclick="window.location.href='../productos?accion=listarAdmin'" style="cursor: pointer;">
+                    <div class="card-admin" onclick="window.location.href = '../productos?accion=listarAdmin'" style="cursor: pointer;">
                         <i data-lucide="package" style="width: 48px; height: 48px; color: var(--color-bg-6th);"></i>
                         <h3>Productos</h3>
                         <p>Administrar Inventario</p> 
