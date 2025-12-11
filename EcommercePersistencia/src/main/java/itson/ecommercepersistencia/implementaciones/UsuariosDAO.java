@@ -142,4 +142,17 @@ public class UsuariosDAO implements IUsuariosDAO {
         }
     }
 
+    @Override
+    public UsuarioDTO obtenerUsuarioPorId(ObjectId id) throws PersistenciaException {
+        try {
+            Usuario usuario = coleccion.find(Filters.eq("_id", id)).first();
+            if (usuario == null) {
+                return null;
+            }
+            return new UsuarioDTO(usuario);
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al buscar usuario por ID.", e);
+        }
+    }
+
 }

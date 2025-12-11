@@ -177,7 +177,7 @@ public class UsuariosServlet extends HttpServlet {
                     try {
                         List<UsuarioDTO> lista = usuariosBO.obtenerTodos();
                         request.setAttribute("listaUsuarios", lista);
-                        request.getRequestDispatcher("usuarios.jsp").forward(request, response);
+                        request.getRequestDispatcher("admin/usuarios.jsp").forward(request, response);
                     } catch (NegocioException e) {
                         response.sendRedirect("admin/dashboard.jsp?error=" + e.getMessage());
                     }

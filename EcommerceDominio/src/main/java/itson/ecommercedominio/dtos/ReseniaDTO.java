@@ -5,16 +5,18 @@ import org.bson.types.ObjectId;
 import java.util.Date;
 
 public class ReseniaDTO {
+
     private ObjectId id;
-    private ObjectId idProducto; 
-    private ObjectId idUsuario; 
+    private ObjectId idProducto;
+    private ObjectId idUsuario;
     private String comentario;
     private int calificacion;
     private Date fecha;
+    private String nombreUsuario;
 
     public ReseniaDTO() {
     }
-    
+
     public ReseniaDTO(Resenia resenia) {
         this.id = resenia.getId();
         this.idProducto = resenia.getIdProducto();
@@ -22,6 +24,7 @@ public class ReseniaDTO {
         this.comentario = resenia.getComentario();
         this.calificacion = resenia.getCalificacion();
         this.fecha = resenia.getFecha();
+        this.nombreUsuario = resenia.getNombreUsuario();
     }
 
     public ReseniaDTO(ObjectId idProducto, ObjectId idUsuario, String comentario, int calificacion, Date fecha) {
@@ -87,5 +90,13 @@ public class ReseniaDTO {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 }

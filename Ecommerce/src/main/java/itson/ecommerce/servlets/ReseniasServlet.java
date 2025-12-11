@@ -20,6 +20,7 @@ import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercepersistencia.IConexionBD;
 import itson.ecommercepersistencia.conexionBD.ConexionBD;
 import itson.ecommercepersistencia.implementaciones.ReseniasDAO;
+import itson.ecommercepersistencia.implementaciones.UsuariosDAO;
 import jakarta.servlet.annotation.WebServlet;
 import org.bson.types.ObjectId;
 
@@ -36,7 +37,10 @@ public class ReseniasServlet extends HttpServlet {
     public void init() throws ServletException {
         // 1. Inicializar conexión (false = BD real)
         this.conexion = new ConexionBD(false);
-        this.reseniasBO = new ReseniasBO(new ReseniasDAO(conexion));
+        this.reseniasBO = new ReseniasBO(
+                new ReseniasDAO(conexion),
+                new UsuariosDAO(conexion)
+        );
         System.out.println("ReseniasServlet inicializado.");
     }
 
@@ -87,16 +91,16 @@ public class ReseniasServlet extends HttpServlet {
         // 1. Verificar sesión
         HttpSession session = request.getSession(false);
         UsuarioDTO usuario = (session != null) ? (UsuarioDTO) session.getAttribute("usuarioLogueado") : null;
-        
+
         //2. Verificar que el usuario no es nulo
         if (usuario == null) {
             // Guardar la URL actual para volver después del login (opcional)
             response.sendRedirect("login.jsp");
             return;
         }
-        
+
         //3. Verificar que nomaas los no admin puedan crear reseñas
-        if(usuario.getRolUsuario() == RolUsuario.ADMIN){
+        if (usuario.getRolUsuario() == RolUsuario.ADMIN) {
             //Si lo es regresamos un errror o una advertencia
             String referer = request.getHeader("Referer");
             response.sendRedirect((referer != null ? referer : "index.jsp") + "&error=" + "Los administradores no pueden dejar reseñas. ");
@@ -121,7 +125,7 @@ public class ReseniasServlet extends HttpServlet {
             nuevaReseniaDTO.setComentario(comentario);
             nuevaReseniaDTO.setCalificacion(calificacion);
             nuevaReseniaDTO.setFecha(new Date());
-            
+
             // 6. Llamar al BO para cerear la reseña
             reseniasBO.crearResenia(nuevaReseniaDTO);
 

@@ -16,6 +16,7 @@ import itson.ecommercepersistencia.IConexionBD;
 import itson.ecommercepersistencia.conexionBD.ConexionBD;
 import itson.ecommercepersistencia.implementaciones.ProductosDAO;
 import itson.ecommercepersistencia.implementaciones.ReseniasDAO;
+import itson.ecommercepersistencia.implementaciones.UsuariosDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -45,7 +46,10 @@ public class ProductosServlet extends HttpServlet {
             // Asegúrate de tener el archivo config.properties creado en resources
             this.conexion = new ConexionBD(false);
             this.productosBO = new ProductosBO(new ProductosDAO(this.conexion));
-            this.reseniasBO = new ReseniasBO(new ReseniasDAO(this.conexion));
+            this.reseniasBO = new ReseniasBO(
+                    new ReseniasDAO(this.conexion),
+                    new UsuariosDAO(this.conexion)
+            );
         } catch (Exception e) {
             System.err.println("--- ERROR CRÍTICO EN INIT PRODUCTOS SERVLET ---");
             e.printStackTrace();

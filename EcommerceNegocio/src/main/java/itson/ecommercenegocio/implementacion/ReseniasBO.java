@@ -6,16 +6,20 @@ import itson.ecommercedominio.enumeradores.RolUsuario;
 import itson.ecommercenegocio.IReseniaBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercepersistencia.IReseniasDAO;
+import itson.ecommercepersistencia.IUsuariosDAO;
 import itson.ecommercepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 import org.bson.types.ObjectId;
 
-public class ReseniasBO  implements IReseniaBO{
+public class ReseniasBO implements IReseniaBO {
+
     private final IReseniasDAO reseniasDAO;
+    private final IUsuariosDAO usuariosDAO;
 
     // Inyección de dependencias por constructor
-    public ReseniasBO(IReseniasDAO reseniasDAO) {
+    public ReseniasBO(IReseniasDAO reseniasDAO, IUsuariosDAO usuariosDAO) {
         this.reseniasDAO = reseniasDAO;
+        this.usuariosDAO = usuariosDAO;
     }
 
     @Override
@@ -92,7 +96,24 @@ public class ReseniasBO  implements IReseniaBO{
         }
 
         try {
-            return reseniasDAO.obtenerReseniasPorProducto(idProducto);
+            List<ReseniaDTO> resenias = reseniasDAO.obtenerReseniasPorProducto(idProducto);
+
+            // --- NUEVA LÓGICA: Llenar los nombres ---
+            for (ReseniaDTO r : resenias) {
+                if (r.getIdUsuario() != null) {
+                    UsuarioDTO u = usuariosDAO.obtenerUsuarioPorId(r.getIdUsuario());
+                    if (u != null) {
+                        r.setNombreUsuario(u.getNombre());
+                    } else {
+                        r.setNombreUsuario("Usuario Eliminado");
+                    }
+                } else {
+                    r.setNombreUsuario("Anónimo");
+                }
+            }
+            // ----------------------------------------
+
+            return resenias;
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al consultar las reseñas del producto.", e);
         }
@@ -110,16 +131,18 @@ public class ReseniasBO  implements IReseniaBO{
             throw new NegocioException("Error al consultar el historial de reseñas del usuario.", e);
         }
     }
-    
+
     // Método opcional si lo definiste en la interfaz para validar si ya comentó
     @Override
     public ReseniaDTO obtenerPrimeraReseniaPorUsuario(ObjectId idUsuario) throws NegocioException {
-        if (idUsuario == null) return null;
+        if (idUsuario == null) {
+            return null;
+        }
         try {
             return reseniasDAO.obtenerReseniaPorUsuario(idUsuario);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al buscar reseña.", e);
         }
     }
-    
+
 }
