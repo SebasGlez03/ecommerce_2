@@ -23,6 +23,7 @@ import itson.ecommercepersistencia.IConexionBD;
 import itson.ecommercepersistencia.IUsuariosDAO;
 import itson.ecommercepersistencia.conexionBD.ConexionBD;
 import itson.ecommercepersistencia.implementaciones.UsuariosDAO;
+import java.util.List;
 
 /**
  *
@@ -36,6 +37,7 @@ public class UsuariosServlet extends HttpServlet {
     /**
      * El metodo init() se llama una sola vez cuando el Servlet es creado. Aqui
      * se crea la cadena de dependencias.
+     *
      * @throws jakarta.servlet.ServletException
      */
     @Override
@@ -144,10 +146,51 @@ public class UsuariosServlet extends HttpServlet {
 
         String accion = request.getParameter("accion");
 
-        if (accion != null && accion.equals("logout")){
-            this.manejarLogOut(request, response);
-        } else {
+        // Si no hay acción, mandamos al login y TERMINAMOS la ejecución con return
+        if (accion == null) {
             response.sendRedirect("login.jsp");
+            return;
+        }
+        HttpSession session;
+        switch (accion) {
+            case "logout":
+                this.manejarLogOut(request, response);
+                break;
+
+            case "verPerfil":
+                // Lógica para mostrar perfil
+                 
+                session = request.getSession(false);
+                if (session != null && session.getAttribute("usuarioLogueado") != null) {
+                    request.getRequestDispatcher("perfil.jsp").forward(request, response);
+                } else {
+                    response.sendRedirect("login.jsp");
+                }
+                break;
+
+            case "listarAdmin":
+                // Verificar que sea ADMIN
+               session = request.getSession(false);
+                UsuarioDTO admin = (session != null) ? (UsuarioDTO) session.getAttribute("usuarioLogueado") : null;
+
+                if (admin != null && admin.getRolUsuario() == RolUsuario.ADMIN) {
+                    try {
+                        List<UsuarioDTO> lista = usuariosBO.obtenerTodos();
+                        request.setAttribute("listaUsuarios", lista);
+                        request.getRequestDispatcher("usuarios.jsp").forward(request, response);
+                    } catch (NegocioException e) {
+                        response.sendRedirect("admin/dashboard.jsp?error=" + e.getMessage());
+                    }
+                } else {
+                    response.sendRedirect("index.jsp"); // Si no es admin, para fuera
+                }
+                break;
+
+            default:
+                // Cualquier otra acción desconocida manda al login
+                response.sendRedirect("login.jsp");
+                break;
+
         }
     }
 
@@ -182,6 +225,12 @@ public class UsuariosServlet extends HttpServlet {
                 break;
             case "login":
                 this.manejarLogin(request, response);
+                break;
+            case "editar":
+                manejarEdicion(request, response);
+                break;
+            case "cambiarEstado":
+                cambiarEstadoUsuario(request, response);
                 break;
             default:
                 response.sendRedirect("login.jsp");
@@ -237,7 +286,6 @@ public class UsuariosServlet extends HttpServlet {
             //     out.println("</body>");
             //     out.println("</html>");
             // }
-
             request.setAttribute("mensajeExito", "Cuenta creada! Inicia Sesion.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } catch (NegocioException e) {
@@ -272,7 +320,7 @@ public class UsuariosServlet extends HttpServlet {
             session.setMaxInactiveInterval(30 * 60);
 
             // 4. Redirigir al inicio segun el rol
-            if (usuarioDTO.getRolUsuario() == RolUsuario.ADMIN){
+            if (usuarioDTO.getRolUsuario() == RolUsuario.ADMIN) {
                 response.sendRedirect("admin/dashboard.jsp");
             } else {
                 response.sendRedirect("index.jsp"); // Pagina principal
@@ -290,12 +338,67 @@ public class UsuariosServlet extends HttpServlet {
         }
     }
 
-    public void manejarLogOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    public void manejarLogOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate(); // Destruye la sesion
         }
         response.sendRedirect("login.jsp");
+    }
+
+    private void manejarEdicion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UsuarioDTO usuarioActual = (UsuarioDTO) session.getAttribute("usuarioLogueado");
+
+        if (usuarioActual == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // 1. Obtener datos del form
+        String nombre = request.getParameter("nombre");
+        String email = request.getParameter("email"); // Ojo: usualmente el email no se edita fácil por temas de ID, pero aquí lo permitiremos
+        String direccion = request.getParameter("direccion");
+        String telefono = request.getParameter("telefono");
+        String password = request.getParameter("password"); // Puede venir vacío
+
+        try {
+            // 2. Actualizar el objeto DTO (usamos el ID que ya tenemos en sesión)
+            usuarioActual.setNombre(nombre);
+            usuarioActual.setEmail(email);
+            usuarioActual.setDireccion(direccion);
+            usuarioActual.setTelefono(telefono);
+            usuarioActual.setContrasenia(password); // El BO sabrá qué hacer si está vacío
+
+            // 3. Llamar al BO
+            UsuarioDTO usuarioActualizado = usuariosBO.actualizarUsuario(usuarioActual);
+
+            // 4. IMPORTANTE: Actualizar la sesión con los nuevos datos para que se vea reflejado en el header
+            // Como la contraseña ya viene hasheada del BO o nula, ten cuidado de no sobreescribir mal si necesitas la plana, 
+            // pero para sesión el DTO está bien.
+            session.setAttribute("usuarioLogueado", usuarioActualizado);
+
+            // 5. Redirigir con éxito
+            request.setAttribute("mensajeExito", "¡Perfil actualizado correctamente!");
+            request.getRequestDispatcher("perfil.jsp").forward(request, response);
+
+        } catch (NegocioException e) {
+            request.setAttribute("error", e.getMessage());
+            request.getRequestDispatcher("perfil.jsp").forward(request, response);
+        }
+    }
+
+    private void cambiarEstadoUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String idUsuario = request.getParameter("idUsuario");
+        boolean nuevoEstado = Boolean.parseBoolean(request.getParameter("nuevoEstado"));
+
+        try {
+            usuariosBO.cambiarEstadoUsuario(idUsuario, nuevoEstado);
+            response.sendRedirect("usuarios?accion=listarAdmin");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("usuarios?accion=listarAdmin&error=ErrorAlActualizar");
+        }
     }
 
     /**

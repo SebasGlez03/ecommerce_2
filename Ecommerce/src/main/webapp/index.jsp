@@ -34,7 +34,7 @@
                     <a class="categorias_disponibles" href="productos?categoria=MONITORES">Monitores</a>
                 </div>
                 <a href="#">Ofertas</a>
-                
+
                 <c:if test="${sessionScope.usuarioLogueado.rolUsuario == 'ADMIN'}">
                     <span style="color: var(--color-txt-secondary);">|</span>
                     <a href="admin/dashboard.jsp" style="color: #ff6b6b; font-weight: bold;">Panel Admin</a>
@@ -48,15 +48,28 @@
 
             <div class="user_section">
                 <c:choose>
+                    <%-- CASO 1: USUARIO LOGUEADO --%>
                     <c:when test="${not empty sessionScope.usuarioLogueado}">
                         <span style="margin-right: 15px; font-size: 14px;">Hola, <b>${sessionScope.usuarioLogueado.nombre}</b></span>
-                        <a class="login_btn" href="usuarios?accion=logout" style="color: #ff6b6b; font-weight: bold; font-size: 14px;">(Cerrar Sesión)</a>
+
+                        <a class="login_btn" href="usuarios?accion=logout" style="color: #ff6b6b; font-weight: bold; font-size: 14px; margin-right: 10px;">(Cerrar Sesión)</a>
+
+                        <%-- Aquí envolvemos la imagen en un enlace hacia el perfil --%>
+                        <a href="usuarios?accion=verPerfil" title="Editar mi perfil">
+                            <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png" alt="Avatar" style="cursor: pointer;">
+                        </a>
                     </c:when>
+
+                    <%-- CASO 2: USUARIO NO LOGUEADO --%>
                     <c:otherwise>
-                        <a class="login_btn" href="login.jsp" style="font-weight: bold;">Iniciar Sesión</a>
+                        <a class="login_btn" href="login.jsp" style="font-weight: bold; margin-right: 10px;">Iniciar Sesión</a>
+
+                        <%-- Si no está logueado, la imagen puede llevar al login también --%>
+                        <a href="login.jsp" title="Iniciar Sesión">
+                            <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png" alt="Avatar">
+                        </a>
                     </c:otherwise>
                 </c:choose>
-                <img class="user_avatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225881.png" alt="Avatar">
             </div>
         </header>
 
@@ -93,19 +106,19 @@
                             <img src="https://ddtech.mx/assets/uploads/c10a87543113eb7c3bb9caaf958119bf.png" alt="Prod 3">
                             <div class="product_info"><p>Mochila Gamer</p><p>$799.00</p></div>
                         </div>
-                         <div class="product_card">
+                        <div class="product_card">
                             <img src="https://ddtech.mx/assets/uploads/e22f6d5e9dd5c30f6737665e5da99899.png" alt="Prod 4">
                             <div class="product_info"><p>Mouse Corsair</p><p>$2,899.00</p></div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="titulo_productos_generales">
                     <h2>Todos los Productos</h2>
                 </div>
-                
-                
-                
+
+
+
                 <div class="general_products_container">
                     <div class="general_products_track">
 

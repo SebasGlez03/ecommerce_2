@@ -77,6 +77,40 @@ public class UsuarioDTO {
         return rolUsuario;
     }
 
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setEsActivo(Boolean esActivo) {
+        this.esActivo = esActivo;
+    }
+
+    public void setRolUsuario(RolUsuario rolUsuario) {
+        this.rolUsuario = rolUsuario;
+    }
+    
+    
+
     @Override
     public String toString() {
         return "UsuarioDTO{" + "id=" + id + ", nombre=" + nombre + ", email=" + email + ", contrasenia=" + contrasenia + ", direccion=" + direccion + ", telefono=" + telefono + ", esActivo=" + esActivo + ", rolUsuario=" + rolUsuario + '}';

@@ -10,20 +10,22 @@ import itson.ecommercenegocio.IUsuariosBO;
 import itson.ecommercenegocio.excepciones.NegocioException;
 import itson.ecommercepersistencia.IUsuariosDAO;
 import itson.ecommercepersistencia.excepciones.PersistenciaException;
+import java.util.List;
+import org.bson.types.ObjectId;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author LENOVO
  */
-public class UsuariosBO implements IUsuariosBO{
+public class UsuariosBO implements IUsuariosBO {
 
     private IUsuariosDAO usuariosDAO;
 
     public UsuariosBO(IUsuariosDAO usuariosDAO) {
         this.usuariosDAO = usuariosDAO;
     }
-    
+
     @Override
     public UsuarioDTO crearUsuario(Usuario usuario) throws NegocioException {
         //Validacion del nombre
@@ -41,7 +43,7 @@ public class UsuariosBO implements IUsuariosBO{
             //Encriptacion de contra
             String contraseniaHasheada = BCrypt.hashpw(usuario.getContrasenia(), BCrypt.gensalt());
             usuario.setContrasenia(contraseniaHasheada);
-            
+
             UsuarioDTO nuevoUsuario = new UsuarioDTO(usuario);
             return usuariosDAO.crearUsuario(nuevoUsuario);
 
@@ -73,12 +75,64 @@ public class UsuariosBO implements IUsuariosBO{
             if (!BCrypt.checkpw(contrasenia, usuarioEncontrado.getContrasenia())) {
                 throw new NegocioException("Credenciales incorrectas.");
             }
-            
+
             return usuarioEncontrado;
 
         } catch (PersistenciaException e) {
             throw new NegocioException("Error en la DAO al intentar iniciar sesión.", e);
         }
     }
-    
+
+    @Override
+    public UsuarioDTO actualizarUsuario(UsuarioDTO usuario) throws NegocioException {
+
+        // Validaciones básicas
+        if (usuario.getId() == null) {
+            throw new NegocioException("No se puede editar un usuario sin ID.");
+        }
+        if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
+            throw new NegocioException("El nombre es obligatorio.");
+        }
+
+        try {
+            // Lógica para la contraseña:
+            // Si viene con texto, la encriptamos. Si viene vacía, la dejamos null para que el DAO no la toque.
+            if (usuario.getContrasenia() != null && !usuario.getContrasenia().trim().isEmpty()) {
+                String hash = BCrypt.hashpw(usuario.getContrasenia(), BCrypt.gensalt());
+                usuario.setContrasenia(hash);
+            } else {
+                usuario.setContrasenia(null);
+            }
+
+            return usuariosDAO.actualizarUsuario(usuario);
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al actualizar la información del usuario.", e);
+        }
+    }
+
+    @Override
+    public List<UsuarioDTO> obtenerTodos() throws NegocioException {
+        try {
+            return usuariosDAO.obtenerTodos();
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al obtener la lista de usuarios.", e);
+        }
+    }
+
+    @Override
+    public void cambiarEstadoUsuario(String idUsuarioStr, boolean nuevoEstado) throws NegocioException {
+        try {
+            if (idUsuarioStr == null || idUsuarioStr.isEmpty()) {
+                throw new NegocioException("ID de usuario inválido.");
+            }
+            ObjectId id = new ObjectId(idUsuarioStr);
+            usuariosDAO.actualizarEstado(id, nuevoEstado);
+        } catch (IllegalArgumentException e) {
+            throw new NegocioException("Formato de ID inválido.");
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al cambiar el estado del usuario.", e);
+        }
+    }
+
 }
