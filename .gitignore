@@ -1,10 +1,12 @@
 # NO BORRAR ESTE YA QUE CUENTA CON INFO SENSIBLE
 # El archivo de credenciales debe encontrarse en la direccion de la siguiente linea
-/EcommercePersistencia/src/main/resources/config.properties
-/EcommercePersistencia/nbproject/
+/EcommerceProject/EcommercePersistencia/src/main/resources/config.properties
+/EcommerceProject/EcommercePersistencia/nbproject/
 
 # Targets
-/EcommerceDominio/target/
-/EcommercePersistencia/target/
-/EcommerceNegocio/target/
-/Ecommerce/target/
+/EcommerceProject/EcommerceDominio/target/
+/EcommerceProject/EcommercePersistencia/target/
+/EcommerceProject/EcommerceNegocio/target/
+/EcommerceProject/EcommerceNegocio/nbproject/
+/EcommerceProject/Ecommerce/target/
+/EcommerceProject/Ecommerce/target/
