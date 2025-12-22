@@ -2,7 +2,7 @@ FROM tomcat:10.1-jdk21
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY Ecommerce/target/Ecommerce-1.0.war /usr/local/tomcat/webapps/Ecommerce.war
+COPY EcommerceProject/Ecommerce/target/Ecommerce-1.0.war /usr/local/tomcat/webapps/Ecommerce.war
 
 EXPOSE 8080
 

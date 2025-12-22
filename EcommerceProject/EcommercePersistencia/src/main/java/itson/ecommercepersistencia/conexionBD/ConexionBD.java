@@ -39,37 +39,32 @@ public class ConexionBD implements IConexionBD{
      */
     public ConexionBD(boolean esPrueba) {
 
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+        Properties props = new Properties();
 
-            Properties props = new Properties();
-
-            if (input == null ){
-                // Esto pasara si un colaborador de github olvida crear su archivo config.properties
-                System.out.println("Error: No se pudo encontrar el archivo 'config.properties' en el classpath.");
-                System.out.println("Asegúrate de copiar 'config.properties.template' y renombrarlo a 'config.properties' en la carpeta 'src/main/resources/'");
-                throw new RuntimeException("Error: No se pudo encontrar el archivo config.properties");
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")){
+            if (input != null) {
+                props.load(input);
             }
-
-            // Cargar el archivo de propiedades
-            props.load(input);
-
-            // Leer las propiedades del archivo
-            String usuario = props.getProperty("db.usuario");
-            String contrasenia = props.getProperty("db.contrasenia");
-            String ip = props.getProperty("db.ip");
-            String puerto = props.getProperty("db.puerto");
-            String authDb = props.getProperty("db.auth_db");
-
-            // Construir la cadena de conexion
-            this.CONEXION_STRING = String.format(
-                "mongodb://%s:%s@%s:%s/?authSource=%s",
-                usuario, contrasenia, ip, puerto, authDb
-            );
-
-        } catch (Exception ex) {
-            // Error si no se puede leer el archivo
-            throw new RuntimeException("Error al cargar la configuracion de la base de datos desde config.properties", ex);
+        } catch (Exception e) {
+            throw new RuntimeException("Error cargando config.properties", e);
         }
+
+        // Variables de entorno
+        String usuario     = System.getenv().getOrDefault("DB_USUARIO", props.getProperty("db.usuario"));
+        String contrasenia = System.getenv().getOrDefault("DB_CONTRASENIA", props.getProperty("db.contrasenia"));
+        String ip          = System.getenv().getOrDefault("DB_IP", props.getProperty("db.ip"));
+        String puerto      = System.getenv().getOrDefault("DB_PUERTO", props.getProperty("db.puerto"));
+        String authDb      = System.getenv().getOrDefault("DB_AUTH_DB", props.getProperty("db.auth_db"));
+
+        if (usuario == null || contrasenia == null || ip == null || puerto == null || authDb == null) {
+            throw new RuntimeException("Faltan credenciales de MongoDB");
+        }
+
+        this.CONEXION_STRING = String.format(
+            "mongodb://%s:%s@%s:%s/?authSource=%s",
+            usuario, contrasenia, ip, puerto, authDb
+        );
+
 
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
